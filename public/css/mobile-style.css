@@ -1,0 +1,97 @@
+@media only screen and (max-width: 768px){
+  header .navbar-brand{
+    padding-left: 1rem;
+  }
+
+  .section-2 .row .col-md-6 .panel{
+    position: initial;
+    width: initial;
+    height: initial;
+  }
+
+  .section-newArrival .col-4:nth-child(n+4){
+    display: none;
+  }
+
+}
+
+@media only screen and (max-width: 425px){
+
+  footer .row .col-md-2{
+    margin-top: 8vmin;
+  }
+
+  header .row .col-md-7{
+    padding-bottom: 50px;
+  }
+
+  .section-newArrival .row .col-4{
+    text-align: center;
+    flex-basis: 100%;
+  }
+
+  #product-carousel .slider-1, #product-carousel .slider-2{
+    margin-top: 0;
+  }
+
+  .carousel-inner{
+    height: 300px;
+  }
+
+  .single-product .row{
+    text-align: left;
+  }
+  .single-product .col-6{
+    padding: 20px 0;
+
+  }
+  .single-product h1{
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .cart-info p{
+    display: none;
+  }
+
+}
+
+@media only screen and (max-width: 375px){
+  .section-newArrival .col-4{
+    margin: auto;
+  }
+
+  .row-2{
+    margin-top: 40px;
+  }
+
+  .row-2 h2{
+    font-size: 25px;
+  }
+  .row-2 select{
+    width: 150px;
+    height: 30px;
+    font-size: 12px;
+  }
+  .productPage .col-4{
+    margin: 0 auto;
+    min-width: 170px;
+  }
+}
+
+@media only screen and (max-width: 320px){
+  .row-2 h2{
+    font-size: 20px;
+  }
+  .row-2 select{
+    width: 120px;
+    height: 30%;
+    font-size: 12px;
+  }
+  option{
+    font-size: 1px;
+  }
+  .productPage .col-4{
+    min-width: 150px;
+  }
+}

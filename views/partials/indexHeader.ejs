@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+    crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/mobile-style.css">
+    <title>Ecovani</title>
+  </head>
+  <body>
+    <header>
+      <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg">
+          <a class="navbar-brand" href="/">
+            <i class="fas fa-tshirt fa-2x mx-3"></i>
+            Ecovani
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-align-right text-dark"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="mr-auto"></div>
+            <ul class="navbar-nav">
+              <li class="nav-item active dropdown">
+                <div class="dropdown dropdown-hover">
+                  <a href="/products" class="nav-link">All Products<span class="sr-only">(current)</span></a>
+                  <div class="dropdown-content">
+                    <% categories.forEach(function(c){ %>
+                      <a href="/products/<%= c.slug %>"><%= c.title %></a>
+                    <% }); %>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Product</a>
+              </li>
+              <li class="nav-item active dropdown">
+                <div class="dropdown dropdown-hover">
+                  <a href="products.html" class="nav-link">Account<span class="sr-only">(current)</span></a>
+                  <div class="dropdown-content">
+                    <a href="#">View payment history</a>
+                    <a href="/logout">Logout</a>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link cart" href="/cart/checkout">Cart
+                  <% if (typeof cart !== "undefined") { %>
+                  <small style="color: white;" class="cart-number"><b><%= cart.length %></b></small>
+                  <% } else {%>
+                  <i class="fas fa-shopping-cart fa-1x"></i>
+                  <% } %>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>

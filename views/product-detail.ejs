@@ -1,0 +1,86 @@
+<%- include('partials/indexHeader') %>
+  </header>
+
+    <main>
+
+    <!---single product details ----->
+      <div class="small-container single-product">
+        <div class="row">
+          <div class="col-6 mobile-version">
+            <img src="/product_images/<%=p.id%>/<%=p.image%>" width="100%" id="productImg">
+            <div class="small-img-row">
+              <% galleryImages.forEach(function(image){%>
+                <%if(image != "thumbs") {%>
+                  <div class="small-img-col">
+                    <img src="/product_images/<%=p.id%>/gallery/thumbs/<%=image%>" width="100%" class="small-img">
+                  </div>
+                <%}%>
+              <%})%>
+            </div>
+          </div>
+
+          <div class="col-6 details">
+            <p>Home/Hoodie</p>
+            <h1><%=title%></h1>
+            <h4>$<%=parseFloat(p.price).toFixed(2)%></h4>
+            <select>
+              <option>Select Size</option>
+              <option>XXL</option>
+              <option>XL</option>
+              <option>Large</option>
+              <option>Medium</option>
+              <option>Small</option>
+            </select>
+            <input type="number" value="1">
+            <a href="/cart/add/<%=p.slug%>" class="btn btn-light px-5 py-2">Add to cart</a>
+            <h3>Product Details</h3>
+            <br>
+            <p><%=p.description%></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="small-container">
+        <div class="row row-2">
+          <h2>Related Products</h2>
+        </div>
+      </div>
+
+      <section class="productPage">
+        <div class="small-container">
+          <div class="row">
+            <div class="col-4">
+              <a href="#">
+              <img src="assets/product-1.jpg" alt="">
+              <h4>Blue Hoodie</h4>
+              <p>$50.00</p>
+              </a>
+            </div>
+            <div class="col-4 moreBox">
+              <a href="#">
+                <img src="assets/product-2.jpg" alt="">
+                <h4>White Sweater with Black stripes</h4>
+                <p>$30.00</p>
+              </a>
+            </div>
+            <div class="col-4 moreBox">
+              <a href="#">
+                <img src="assets/product-3.jpg" alt="">
+                <h4>Blue Hoodie</h4>
+                <p>$50.00</p>
+              </a>
+            </div>
+            <div class="col-4 moreBox">
+              <a href="#">
+                <img src="assets/product-4.jpg" alt="">
+                <h4>Blue Hoodie</h4>
+                <p>$50.00</p>
+              </a>
+            </div>
+
+        </div>
+      </section>
+
+    </main>
+
+  <%- include('partials/indexFooter') %>

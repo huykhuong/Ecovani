@@ -1,0 +1,30 @@
+<% if(typeof errors != 'undefined') { %>
+  <%errors.forEach(function(error) { %>
+    <p style="color: red;"><%= error.msg %></p>
+  <% }); %>
+<% } %>
+
+<% if(typeof categoryErrors != 'undefined') { %>
+  <%categoryErrors.forEach(function(error) { %>
+    <p style="color: red;"><%= error.msg %></p>
+  <% }); %>
+<% } %>
+
+<% if(typeof categorySuccess != 'undefined') { %>
+  <%categorySuccess.forEach(function(success) { %>
+    <p style="color: green;"><%= success.msg %></p>
+  <% }); %>
+<% } %>
+
+<% if(success_msg != '') { %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= success_msg %>
+      <button type="button" class="close special" data-dismiss="alert" aria-label="Close">
+        <span style="font-size:20px;"aria-hidden="true">&times;</span>
+      </button>
+  </div>
+<%} %>
+
+<% if(error != '') { %>
+  <p style="color: red; margin-bottom:0;"><%= error %></p>
+<%} %>

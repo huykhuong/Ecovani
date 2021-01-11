@@ -1,0 +1,762 @@
+/* Google Font */
+@import url("https://fonts.googleapis.com/css?family=Acmel|Lobster|Patua+One|Rubik|Sniglet");
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+section{
+  overflow-x: hidden;
+}
+
+:root{
+  --Snigle-font:"Sniglet",cursive;
+  --Rubik:"Rubik", cursive;
+  --Patua:"Patua One", cursive;
+  --Lobster: "Lobster",cursive;
+  --light-black:#2e2c2caf;
+  --bggradient:linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+  --light-gray:rgba(255, 225, 225, 0.7);
+}
+
+header a{
+  font-family: var(--Snigle-font);
+  font-size:0.9em;
+  color: black;
+}
+
+header{
+  background: var(--bggradient);
+}
+
+.dropdown-content{
+  display: none;
+  position: absolute;
+  background: white;
+  min-width: 160px;
+  box-shadow: 0px 2px 15px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a{
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover{
+  background: #ddd;
+}
+
+.dropdown-hover:hover .dropdown-content{
+  display: block;
+}
+
+header .nav-item:last-child{
+  padding-right: 10.5em;
+  position: relative;
+}
+
+header .nav-item:last-child .nav-link{
+  padding-right: 1.4em;
+}
+
+header .nav-item{
+  padding: 0.9em;
+}
+
+header .navbar-brand{
+  padding-left: 8rem;
+}
+
+header .nav-link:hover{
+  color: white;
+  background: black;
+}
+
+header .row .col-md-5{
+  padding: 10vmin 1vmin;
+}
+
+header .row .col-md-7{
+  padding: 15vmin 1vmin;
+  padding-bottom: 35vmin;
+  font-family: var(--Rubik)
+}
+
+header .row .col-md-5 img{
+  width: 90%;
+}
+
+header .container .col-md-7 h6{
+  padding: 1vmin;
+  letter-spacing: 4px;
+}
+
+header .container .col-md-7 h1{
+  font-size: 8vmin;
+  font-weight: bold;
+  padding: 0.1em 0em;
+}
+
+header .container .col-md-7 p{
+  padding: 1vmin 5vmin;
+}
+
+header .container .col-md-7 button, .collections .col-4 button{
+  border-radius: 30px;
+  font-weight: bold;
+}
+
+.fa-shopping-cart{
+  position: absolute;
+  top: 1.4em;
+}
+
+.cart-number{
+  position: absolute;
+  top: 1.4em;
+  background-color: black;
+  border-radius: 10px;
+    width: 17px;
+    height: 17px;
+    text-align: center;
+}
+
+/* Section 2 */
+
+.section-2{
+  padding: 20vmin 0
+}
+
+.section-2 .row .col-md-6 .pray img{
+  opacity: 0.8;
+  width: 80%;
+  border-radius: 0.2em;
+}
+
+.section-2 .row .col-md-6:last-child{
+  position: relative;
+}
+
+.section-2 .row .col-md-6 .panel{
+  position: absolute;
+  top: 1em;
+  left: -14em;
+  background: white;
+  border-radius: 3px;
+  text-align: left;
+  padding: 9em 5em 12em 6em;
+  box-shadow: 0px 25px 42px rgba(0, 0, 0, 0.2);
+  font-family: var(--Rubik);
+  z-index: 1;
+}
+
+.section-2 .row .col-md-6 .panel h1{
+  font-weight: bold;
+  padding: 0.4em 0;
+  font-size: 2em;
+}
+
+.section-2 .row .col-md-6 .panel p{
+  font-size: 0.9em;
+  color: rgba(0,0,0,0.5);
+}
+
+/* Footer */
+
+footer{
+  background: rgba(0,0,0,0.815);
+  overflow-x: hidden;
+  padding: 14vmin 18vmin;
+
+}
+
+footer p > span{
+  color: #ff512f;
+}
+
+footer input{
+  border: none !important;
+}
+
+footer input::placeholder{
+  color: white !important;
+}
+
+footer .input-group button{
+  background: var(--bggradient);
+  border: none;
+}
+
+footer .column i{
+  color: #dd2476;
+}
+
+footer .column i+i{
+  padding: 0 0.5em;
+}
+
+/* Sticky Navbar */
+.sticky{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.815);
+  z-index: 9999;
+  transition: all 1.5s ease;
+
+}
+
+.sticky-text{
+  color: white ;
+}
+
+/* New Arrivals and All Products*/
+.small-container{
+  max-width: 1150px;
+  margin: auto;
+  padding-left: 25px;
+  padding-right:25px;
+}
+
+.section-newArrival .col-4, .productPage .col-4{
+  flex-basis: 25%;
+  padding: 10px;
+  min-width: 200px;
+  margin-bottom: 50px;
+  transition: transform 0.5s;
+}
+
+.section-newArrival .col-4:hover, .productPage .col-4:hover{
+  transform: translateY(-6px);
+}
+
+.section-newArrival .col-4 img, .productPage .col-4 img{
+  width: 100%;
+}
+
+.section-newArrival .title{
+  text-align: center;
+  margin: 50px auto 80px;
+  position: relative;
+  line-height: 60px;
+  color: #555;
+}
+
+.section-newArrival .title::after{
+  content: '';
+  background: #224638;
+  width: 80px;
+  height: 5px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.section-newArrival .col-4 h4, .productPage .col-4 h4{
+  color: #555;
+  font-weight: normal;
+}
+
+.section-newArrival .col-4 p, .productPage .col-4 p{
+  font-size: 14px;
+  color: #555;
+}
+
+.section-newArrival .col-4 a, .productPage .col-4 a{
+  text-decoration: none;
+}
+
+.section-newArrival button, .productPage .col-4 button{
+  margin: auto;
+  border-radius: 30px;
+  font-weight: bold;
+}
+
+.section-newArrival .col-4:nth-child(n+5){
+  display: none;
+}
+
+/* Collections Section */
+
+.collections{
+  margin-top: 80px;
+  padding: 90px 0;
+}
+
+#product-carousel{
+  margin-top: 70px;
+}
+
+.carousel-inner{
+  position: relative;
+  height: 700px;
+}
+
+#product-carousel img{
+  position: absolute;
+  z-index: -1;
+}
+
+#product-carousel .col-4{
+  text-align: center;
+}
+
+#product-carousel .col-4 h2{
+  position: relative;
+  line-height: 60px;
+  color: #fff;
+  font-size: 2.5em;
+}
+
+#product-carousel .col-4 h2::after{
+  content: '';
+  background: #fff;
+  width: 80px;
+  height: 2px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-49%);
+}
+
+#product-carousel .col-4 button{
+  margin: 2em 0;
+}
+
+#product-carousel .slider-2{
+  margin-left: 120px;
+}
+
+#product-carousel .slider-1, #product-carousel .slider-2{
+  margin-top: 250px;
+}
+
+/* All Product Page exclusive's customization */
+.row-2{
+  justify-content: space-between;
+  margin: 100px auto 50px;
+}
+
+select{
+  border: 1px solid #000;
+  padding: 5px;
+}
+
+select:focus{
+  outline: none;
+}
+
+.page-btn{
+  margin: 0 auto 80px;
+}
+
+.page-btn span{
+  display: inline-block;
+  border: 1px solid #000;
+  margin-left: 10px;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.page-btn span:hover{
+  background: #000;
+  color: #fff;
+}
+
+/* Single product detail page */
+.single-product{
+  margin-top: 80px;
+}
+
+.single-product .col-2 img{
+  padding: 0;
+}
+
+.single-product .col-2{
+  padding: 20px;
+}
+
+.single-product h4{
+  margin: 20px 0;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.single-product select{
+  display: block;
+  padding: 5px;
+  margin-top: 20px;
+}
+
+.single-product input{
+  width: 45px;
+  height: 35px;
+  padding-left: 10px;
+  font-size: 15px;
+  margin-right: 10px;
+  border: 1px solid #224638;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+input:focus{
+  outline: none;
+}
+
+.single-product .details{
+  margin-top: 100px;
+}
+
+.small-img-row{
+  display: flex;
+}
+
+.small-img-col{
+  margin-left: 3px;
+  flex-basis: 24%;
+  cursor: pointer;
+}
+
+/* cart items */
+
+.cart-page{
+  margin: 80px auto;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-info{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cart-info p{
+  margin: 0;
+}
+
+th{
+  text-align: left;
+  padding: 5px;
+  color: #000;
+  background: var(--bggradient);
+  font-weight: normal;
+}
+
+td{
+  padding: 10px 5px;
+}
+
+td input{
+  width: 40px;
+  height: 30px;
+  padding: 5px;
+}
+
+td a{
+  color: #ff523b;
+  font-size: 12px;
+}
+
+td img{
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+}
+
+.total-price{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.total-price table{
+  border-top: 1px solid #000;
+  width: 100%;
+  max-width: 400px;
+}
+
+td:last-child{
+  text-align: right;
+}
+
+th:last-child{
+  text-align: right;
+}
+
+/* Login Page */
+/* From this part I have borrowed the template code for the css customizations for the login page from this source: https://codepen.io/FlorinPop17/pen/vPKWjd */
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+.hero{
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4),rgba(0, 0, 0, 0.4)), url(../assets/pexels-daria-shevtsova-698163.jpg);
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
+	height: 100vh;
+}
+
+.hero h1 {
+	font-weight: 700;
+	margin: 0;
+}
+
+.hero h2 {
+	text-align: center;
+}
+
+.hero p {
+	font-size: 14px;
+	font-weight: 100;
+	line-height: 20px;
+	letter-spacing: 0.5px;
+	margin: 20px 0 30px;
+}
+
+.hero span {
+	font-size: 12px;
+}
+
+.hero a {
+	color: #333;
+	font-size: 14px;
+	text-decoration: none;
+	margin: 15px 0;
+}
+
+.hero button:not(.special) {
+	border-radius: 20px;
+	border: 1px solid #5c7287;
+	background-color: #5c7287;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+.hero button:active {
+	transform: scale(0.95);
+}
+
+.hero button:focus {
+	outline: none;
+}
+
+.hero form {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	height: 100%;
+	text-align: center;
+}
+
+.hero input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+}
+
+.hero .container {
+	background-color: #fff;
+	border-radius: 10px;
+  	box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+			0 10px 10px rgba(0,0,0,0.22);
+	position: relative;
+	overflow: hidden;
+	width: 768px;
+	max-width: 100%;
+	min-height: 550px;
+}
+
+.hero .form-container {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	transition: all 0.6s ease-in-out;
+}
+
+.hero .sign-in-container {
+	left: 0;
+	width: 50%;
+}
+
+.hero .container.right-panel-active .sign-in-container {
+	transform: translateX(100%);
+}
+
+@keyframes show {
+	0%, 49.99% {
+		opacity: 0;
+		z-index: 1;
+	}
+
+	50%, 100% {
+		opacity: 1;
+		z-index: 5;
+	}
+}
+
+.hero .overlay-container {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	overflow: hidden;
+	transition: transform 0.6s ease-in-out;
+	z-index: 100;
+}
+
+.hero .container.right-panel-active .overlay-container{
+	transform: translateX(-100%);
+}
+
+.hero .overlay {
+  background-color: #5c7287;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 0;
+	color: #FFFFFF;
+	position: relative;
+	left: -100%;
+	height: 100%;
+	width: 200%;
+  transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+}
+
+.hero .container.right-panel-active .overlay {
+  	transform: translateX(50%);
+}
+
+.hero .overlay-panel {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 40px;
+	text-align: center;
+	top: 0;
+	height: 100%;
+	width: 50%;
+	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+}
+
+.hero .overlay-left {
+	transform: translateX(-20%);
+}
+
+.hero .container.right-panel-active .overlay-left {
+	transform: translateX(0);
+}
+
+.hero .overlay-right {
+	right: 0;
+	transform: translateX(0);
+}
+
+.hero .container.right-panel-active .overlay-right {
+	transform: translateX(20%);
+}
+
+.hero .social-container {
+	margin: 20px 0;
+}
+
+.hero .social-container a {
+	border: 1px solid #DDDDDD;
+	border-radius: 50%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 5px;
+	height: 40px;
+	width: 40px;
+}
+
+/* CART SESSION */
+#empty-cart{
+  margin-bottom:9.95em;
+  margin-top:5em;
+}
+
+.plus-sign, .minus-sign{
+  font-size: 23px;
+}
+
+/* CREDIT CARD CUSTOMIZATIONS SESSION */
+.visaActive{
+  color: #1a1e5a;
+  opacity: 1;
+  transform: scale(1.7);
+}
+
+.mastercardActive{
+  color: rgb(247,27,27);
+  color: radial-gradient(circle, rgba(247,27,27,1) 12%, rgba(255,95,0,1) 58%);
+  opacity: 1;
+  transform: scale(1.7);
+}
+
+/* Stripe element customization */
+/**
+ * The CSS shown here will not be introduced in the Quickstart guide, but shows
+ * how you can use CSS to style your Element's container.
+ */
+ .StripeElement {
+   box-sizing: border-box;
+
+   height: 40px;
+   width: 500px;
+
+   padding: 10px 12px;
+
+   border: 1px solid transparent;
+   border-radius: 4px;
+   background-color: white;
+
+   box-shadow: 0 1px 3px 0 #e6ebf1;
+   -webkit-transition: box-shadow 150ms ease;
+   transition: box-shadow 150ms ease;
+ }
+
+ .StripeElement--focus {
+   box-shadow: 0 1px 3px 0 #cfd7df;
+ }
+
+ .StripeElement--invalid {
+   border-color: #fa755a;
+ }
+
+ .StripeElement--webkit-autofill {
+   background-color: #fefde5 !important;
+ }

@@ -1,0 +1,58 @@
+<%- include('partials/indexHeader') %>
+</header>
+
+<main>
+  <% if (typeof cart !== "undefined") { %>
+  <div class="small-container cart-page">
+    <table>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Subtotal</th>
+      </tr>
+
+      <% var total = 0; %>
+      <% cart.forEach(function(product){ %>
+      <% var sub = parseFloat(product.qty * product.price).toFixed(2) %>
+      <% total += +sub %>
+      <tr>
+        <td>
+          <div class="cart-info">
+            <img style="height: 150px; width: 150px;" src="<%= product.image %>">
+            <div>
+              <p class="checkoutTitle" style="margin-top: 20px;"><%= product.title %></p>
+              <small>Price: $<%= product.price %></small><br>
+              <a href="/cart/update/<%= product.title %>?action=clear">Remove</a>
+            </div>
+          </div>
+        </td>
+        <td><%= product.qty %>
+          <a class="minus-sign" href="/cart/update/<%= product.title %>?action=remove">-</a>&nbsp
+          <a class="plus-sign" href="/cart/update/<%= product.title %>?action=add">+</a>&nbsp;
+          </td>
+        <td>$<%= sub %></td>
+      </tr>
+      <% }); %>
+    </table>
+
+    <div class="total-price">
+      <table>
+        <tr>
+          <td>Total</td>
+          <td>$<%= parseFloat(total).toFixed(2) %></td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="text-align: right;">
+      <a class="clearcart btn btn-danger" href="/cart/clear">Clear cart</a>
+      <a class="btn btn-primary" href="/cart/payment">Buy now</a>
+    </div>
+
+  </div>
+  <% } else {%>
+  <h3 id="empty-cart" class="text-center">Your cart is empty.</h3>
+  <% } %>
+</main>
+
+<%- include('partials/indexFooter') %>
