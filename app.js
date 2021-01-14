@@ -212,7 +212,7 @@ app.get("/auth/google/ecovani",
   passport.authenticate('google', {failureRedirect: "/"}),
   function(req,res){
     //Successfully authenticated
-    res.redirect("/home")
+    res.redirect("/")
   }
 )
 
@@ -223,7 +223,7 @@ app.get('/auth/facebook/ecovani',
   passport.authenticate('facebook', { failureRedirect: '/' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.redirect('/home');
+    res.redirect('/');
   });
 
 //APP.LISTEN()

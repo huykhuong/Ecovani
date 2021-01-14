@@ -1,86 +1,154 @@
-<%- include('partials/indexHeader') %>
-  </header>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 
-    <main>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie-edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/mobile-style.css">
+  <title>Ecovani</title>
+</head>
+
+<body>
+
+  <main>
 
     <!---single product details ----->
-      <div class="small-container single-product">
-        <div class="row">
-          <div class="col-6 mobile-version">
-            <img src="/product_images/<%=p.id%>/<%=p.image%>" width="100%" id="productImg">
-            <div class="small-img-row">
-              <% galleryImages.forEach(function(image){%>
-                <%if(image != "thumbs") {%>
-                  <div class="small-img-col">
-                    <img src="/product_images/<%=p.id%>/gallery/thumbs/<%=image%>" width="100%" class="small-img">
-                  </div>
-                <%}%>
-              <%})%>
+    <div class="container-fluid single-product">
+      <div class="row">
+        <div class="col-6 productImage">
+          <script>
+            document.write('<a class="go-back-button" href="' + document.referrer + '"><</a>');
+          </script>
+          <img src="/product_images/<%=p.id%>/<%=p.image%>" width="100%" height="551,500px" id="productImg">
+          <div class="small-img-row">
+            <% galleryImages.forEach(function(image){%>
+            <%if(image != "thumbs") {%>
+            <div class="small-img-col">
+              <img src="/product_images/<%=p.id%>/gallery/<%=image%>" width="100%" height="132px" class="small-img">
             </div>
+            <%}%>
+              <%})%>
           </div>
+        </div>
 
-          <div class="col-6 details">
-            <p>Home/Hoodie</p>
-            <h1><%=title%></h1>
-            <h4>$<%=parseFloat(p.price).toFixed(2)%></h4>
-            <select>
-              <option>Select Size</option>
-              <option>XXL</option>
-              <option>XL</option>
-              <option>Large</option>
-              <option>Medium</option>
-              <option>Small</option>
-            </select>
-            <input type="number" value="1">
-            <a href="/cart/add/<%=p.slug%>" class="btn btn-light px-5 py-2">Add to cart</a>
-            <h3>Product Details</h3>
+        <!-- Script to open small product images in the product detail page -->
+        <script type="text/javascript">
+          var productImg = document.getElementById("productImg");
+          var smallImg = document.getElementsByClassName("small-img");
+
+          smallImg[0].onclick = function(){
+            productImg.src = smallImg[0].src;
+          }
+          smallImg[1].onclick = function(){
+            productImg.src = smallImg[1].src;
+          }
+          smallImg[2].onclick = function(){
+            productImg.src = smallImg[2].src;
+          }
+          smallImg[3].onclick = function(){
+            productImg.src = smallImg[3].src;
+          }
+        </script>
+
+        <div class="col-6 details">
+          <nav class="navbar navbar-expand-lg">
+            <div class="mr-auto"></div>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link cart" href="/cart/checkout">Cart
+                  <% if (typeof cart !== "undefined") { %>
+                  <small style="color: white;" class="cart-number"><b><%= cart.length %></b></small>
+                  <% } else {%>
+                  <i class="fas fa-shopping-cart fa-1x"></i>
+                  <% } %>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <form style="display: inline-block;" action="/cart/add/<%=p.slug%>" method="post">
+            <% var category = p.category.charAt(0).toUpperCase() + p.category.slice(1); %>
+            <p class="category"><%=category%></p>
             <br>
-            <p><%=p.description%></p>
-          </div>
+            <h1 class="form-group"><%=title%></h1>
+            <h4><%=parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></h4>
+            <p class="description"><%=p.description%></p>
+            <input id="1" type="radio" class="hidebx" name="size" value="Small">
+            <label for="1" class="lbl-radio">
+              <div class="display-box">
+                <div class="size">Small</div>
+              </div>
+            </label>
+            <input id="2" type="radio" class="hidebx" name="size" value="Medium">
+            <label for="2" class="lbl-radio">
+              <div class="display-box">
+                <div class="size">Medium</div>
+              </div>
+            </label>
+            <input id="3" type="radio" class="hidebx" name="size" value="Large">
+            <label for="3" class="lbl-radio">
+              <div class="display-box">
+                <div class="size">Large</div>
+              </div>
+            </label>
+            <input id="4" type="radio" class="hidebx" name="size" value="XL">
+            <label for="4" class="lbl-radio">
+              <div class="display-box">
+                <div class="size">XL</div>
+              </div>
+            </label>
+            <p>Quantity</p>
+            <input name="quantity" type="number" value="1" min="1">
+            <button type="submit" class="btn btn-light px-5 py-2 add-to-cart">Add to cart</button>
+          </form>
         </div>
       </div>
+    </div>
 
+    <div class="small-container">
+      <div class="row row-2">
+        <h2>Related Products</h2>
+      </div>
+    </div>
+
+    <section class="productPage">
       <div class="small-container">
-        <div class="row row-2">
-          <h2>Related Products</h2>
-        </div>
-      </div>
-
-      <section class="productPage">
-        <div class="small-container">
-          <div class="row">
-            <div class="col-4">
-              <a href="#">
+        <div class="row">
+          <div class="col-4">
+            <a href="#">
               <img src="assets/product-1.jpg" alt="">
               <h4>Blue Hoodie</h4>
               <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-2.jpg" alt="">
-                <h4>White Sweater with Black stripes</h4>
-                <p>$30.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-3.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-
+            </a>
+          </div>
+          <div class="col-4 moreBox">
+            <a href="#">
+              <img src="assets/product-2.jpg" alt="">
+              <h4>White Sweater with Black stripes</h4>
+              <p>$30.00</p>
+            </a>
+          </div>
+          <div class="col-4 moreBox">
+            <a href="#">
+              <img src="assets/product-3.jpg" alt="">
+              <h4>Blue Hoodie</h4>
+              <p>$50.00</p>
+            </a>
+          </div>
+          <div class="col-4 moreBox">
+            <a href="#">
+              <img src="assets/product-4.jpg" alt="">
+              <h4>Blue Hoodie</h4>
+              <p>$50.00</p>
+            </a>
+          </div>
         </div>
-      </section>
+    </section>
 
-    </main>
+  </main>
 
   <%- include('partials/indexFooter') %>

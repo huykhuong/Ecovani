@@ -1,5 +1,6 @@
 /* Google Font */
 @import url("https://fonts.googleapis.com/css?family=Acmel|Lobster|Patua+One|Rubik|Sniglet");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap');
 
 *{
   box-sizing: border-box;
@@ -12,6 +13,7 @@ section{
 }
 
 :root{
+  --Montserrat:"Montserrat", cursive;
   --Snigle-font:"Sniglet",cursive;
   --Rubik:"Rubik", cursive;
   --Patua:"Patua One", cursive;
@@ -21,7 +23,7 @@ section{
   --light-gray:rgba(255, 225, 225, 0.7);
 }
 
-header a{
+header a, .details .navbar a, .go-back-button{
   font-family: var(--Snigle-font);
   font-size:0.9em;
   color: black;
@@ -55,12 +57,12 @@ header{
   display: block;
 }
 
-header .nav-item:last-child{
+header .nav-item:last-child, .details .nav-item:last-child{
   padding-right: 10.5em;
   position: relative;
 }
 
-header .nav-item:last-child .nav-link{
+header .nav-item:last-child .nav-link, .details .nav-item:last-child .nav-link{
   padding-right: 1.4em;
 }
 
@@ -375,8 +377,10 @@ select:focus{
 }
 
 /* Single product detail page */
-.single-product{
-  margin-top: 80px;
+.go-back-button{
+  position: absolute;
+  top: 80px;
+  font-size: 18px;
 }
 
 .single-product .col-2 img{
@@ -414,8 +418,12 @@ input:focus{
   outline: none;
 }
 
-.single-product .details{
-  margin-top: 100px;
+.single-product .details, .single-product .productImage{
+  padding: 200px;
+}
+
+.single-product .productImage{
+  padding-top: 180px;
 }
 
 .small-img-row{
@@ -426,6 +434,64 @@ input:focus{
   margin-left: 3px;
   flex-basis: 24%;
   cursor: pointer;
+}
+
+.hidebx{
+  display: none;
+}
+
+.lbl-radio{
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #f7f7ed;
+  cursor: pointer;
+  margin: 0 5px 0 0;
+  transition: all 0.3s ease-in;
+  border-radius: 10px;
+  background-color: #f2f2f2;
+}
+
+input[type=radio]:checked + .lbl-radio{
+ background-color: #fff8f0;
+}
+
+.add-to-cart{
+  color: white;
+  background-color: #2e2f33;
+  border-radius: 20px;
+}
+
+.details{
+ background-color: #faf8f6;
+}
+
+.details h1, .details h4, .details p, .details .description{
+  font-family: var(--Montserrat);
+  font-weight: 400;
+}
+
+.details .category{
+  text-align: center;
+  max-width: 150px;
+  border: 1px solid #333438;
+  /* background-color: #333438; */
+  color: #333438;
+  font-size: 15px;
+  padding: 5px 0 5px 0;
+}
+
+.details .fa-shopping-cart, .details small{
+  top: 0;
+}
+
+#productImg{
+  margin-bottom: 5px;
+}
+
+.details .nav-item{
+    position: relative;
+    top: -130px;
+    font-size: 16px;
 }
 
 /* cart items */

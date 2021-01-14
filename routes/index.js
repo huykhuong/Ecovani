@@ -102,24 +102,25 @@ router.get('/product/:category/:product', function(req, res) {
 
 });
 
-//GET ADD PRODUCT TO CART
-router.get('/cart/add/:product', function(req, res) {
+//post ADD PRODUCT TO CART
+router.post('/cart/add/:product', function(req, res) {
 
   var slug = req.params.product
 
-  var title = (slug.charAt(0).toUpperCase() + slug.slice(1));
-  var title2 = title.replace('-',' ')
+  var title = slug.charAt(0).toUpperCase() + slug.slice(1);
+  var title2 = title.replace('-', ' ')
+  var quantity = req.body.quantity
+  console.log(quantity)
   Product.findOne({
     slug: slug
   }, function(err, p) {
     if (err)
       console.log(err);
-
     if (typeof req.session.cart == "undefined") {
       req.session.cart = [];
       req.session.cart.push({
         title: title2,
-        qty: 1,
+        qty: quantity,
         price: parseFloat(p.price).toFixed(2),
         image: '/product_images/' + p._id + '/' + p.image
       });
@@ -138,7 +139,7 @@ router.get('/cart/add/:product', function(req, res) {
       if (newItem) {
         cart.push({
           title: slug,
-          qty: 1,
+          qty: quantity,
           price: parseFloat(p.price).toFixed(2),
           image: '/product_images/' + p._id + '/' + p.image
         });
@@ -209,16 +210,38 @@ router.get("/cart/payment", function(req, res) {
   var cart = req.session.cart;
   if (!cart) {
     res.redirect("/cart/checkout");
-  }
-  cart.forEach(function(product) {
-    var sub = parseFloat(product.qty * product.price).toFixed(2)
-    total += sub
-  })
+  }else{
+    cart.forEach(function(product) {
+      var sub = parseFloat(product.qty * product.price).toFixed(2)
+      total += sub
+    })
 
-  res.render("paymentView", {
-    cart: req.session.cart
-  })
+    res.render("paymentView", {
+      cart: req.session.cart
+    })
+  }
 })
+
+//Delete product
+router.get('/delete-product/:id', function(req, res) {
+
+  var id = req.params.id;
+  var path = 'public/product_images/' + id;
+
+  fs.remove(path, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      Product.findByIdAndRemove(id, function(err) {
+        console.log(err);
+      });
+
+      req.flash('success_msg', 'Product deleted!');
+      res.redirect('/admin/product');
+    }
+  });
+
+});
 
 //POST STRIPE CHARGE
 router.post("/cart/charge", function(req, res) {
@@ -240,14 +263,14 @@ router.post("/cart/charge", function(req, res) {
   const charge = stripe.charges.create({
     amount: total,
     currency: 'vnd',
-    description: 'Example charge',
+    description: 'Ecovani Charge',
     source: token
-  }, function (err, charge){
-    if(err){
+  }, function(err, charge) {
+    if (err) {
       console.log(err)
       return res.redirect('/cart/checkout');
     }
-    req.session.cart = null;
+    delete req.session.cart;
     return res.redirect('/')
   });
 });

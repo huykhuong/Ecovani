@@ -342,6 +342,18 @@ router.post("/product/add-product", function(req, res) {
             productImage.mv(path, function(err) {
               return console.log(err);
             });
+
+            var path2 = 'public/product_images/' + product._id + '/gallery/' + imageFile;
+            var thumbPath2 = 'public/product_images/' + product._id + '/gallery/thumbs/' + imageFile;
+            productImage.mv(path2, function(err) {
+              if (err) console.log(err)
+              resizeImg(fs.readFileSync(path2), {
+                width: 100,
+                height: 100
+              }).then(function(buf) {
+                fs.writeFileSync(thumbPath2, buf);
+              })
+            });
           }
 
           req.flash('success_msg', "Product added");

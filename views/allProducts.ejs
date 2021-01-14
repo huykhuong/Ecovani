@@ -19,7 +19,7 @@
           <% products.forEach(function(p){ %>
             <div class="col-4">
               <a href="/product/<%= p.category %>/<%= p.slug %>">
-                <img class="pimage" src="/product_images/<%= p.id %>/<%= p.image %>" alt="">
+                <img style="max-width: 262px; max-height: 262px;" class="pimage" src="/product_images/<%= p.id %>/<%= p.image %>" alt="">
                 <h4><%= p.title %></h4>
                 <p>$<%= parseFloat(p.price).toFixed(2) %></p>
               </a>
