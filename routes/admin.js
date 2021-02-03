@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const Category = require("../models/category")
-const Product = require("../models/product")
+const moment = require("moment");
 const path = require("path");
 const mkdirp = require("mkdirp");
 const fs = require("fs-extra");
 const resizeImg = require("resize-img");
+
+//GET CAtegory model
+const Category = require("../models/category")
+//Get product model
+const Product = require("../models/product")
+//Get Order model
+var Order = require('../models/order');
 
 //GET ROUTES
 router.get("/", function(req, res) {
@@ -55,20 +61,19 @@ router.get("/category/delete-category/:id", function(req, res) {
   })
 })
 
-router.get("/product", function(req, res) {
-  var count;
-
-  Product.estimatedDocumentCount(function(err, c) {
-    count = c;
-  });
-
-  Product.find(function(err, products) {
-    res.render("adminProduct", {
-      products: products,
-      count: count
-    });
-  })
-})
+//Get all products in admin screen
+router.get('/product', function (req, res) {
+    Product.find({})
+    .exec(function(err,products){
+      Product.countDocuments().exec(function (err, c) {
+        if(err) console.log(err);
+        res.render('adminProduct', {
+            products: products,
+            count: c
+        });
+      });
+    })
+});
 
 router.get("/product/add-product", function(req, res) {
   var title = "";
@@ -142,8 +147,35 @@ router.get("/product/delete-image/:image", function(req, res) {
   })
 })
 
+//Delete product
+router.get('/delete-product/:id', function(req, res) {
+
+  var id = req.params.id;
+  var path = 'public/product_images/' + id;
+
+  fs.remove(path, function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      Product.findByIdAndRemove(id, function(err) {
+        console.log(err);
+      });
+
+      req.flash('success_msg', 'Product deleted!');
+      res.redirect('/admin/product');
+    }
+  });
+});
+
+router.get("/orders",function(req,res){
+  Order.find({status: {$ne: 'completed'}}, null, {sort:{'createdAt': -1}}).exec(function(err,orders){
+  res.render("adminOrderView",{orders: orders, moment: moment})
+  })
+});
 
 //POST ROUTES
+
+//ADD NEW CATEGORY
 router.post("/category/add-category", function(req, res) {
   let categoryErrors = [];
   let categorySuccess = [];
@@ -197,6 +229,8 @@ router.post("/category/add-category", function(req, res) {
   }
 })
 
+
+//EDIT CATEGORY
 router.post("/category/edit-category/:id", function(req, res) {
   let categoryErrors = [];
   let categorySuccess = [];
@@ -264,6 +298,7 @@ router.post("/category/edit-category/:id", function(req, res) {
   }
 })
 
+//ADD PRODUCT
 router.post("/product/add-product", function(req, res) {
   if (!req.files) {
     imageFile = "";
@@ -364,6 +399,7 @@ router.post("/product/add-product", function(req, res) {
   }
 });
 
+//POST edit product
 router.post('/product/edit-product/:id', function (req, res) {
 
   if (!req.files) {
@@ -445,6 +481,7 @@ router.post('/product/edit-product/:id', function (req, res) {
 
 });
 
+//POST
 router.post('/product/product-gallery/:id', function(req, res) {
   var productImage = req.files.file;
   var id = req.params.id;
@@ -461,6 +498,18 @@ router.post('/product/product-gallery/:id', function(req, res) {
     })
   });
   res.sendStatus(200);
+})
+
+//POST Update delivery status of orders
+router.post('/orders/deliveryStatus',function(req,res){
+  Order.updateOne({_id: req.body.orderId}, {deliveryStatus: req.body.deliveryStatus}, function(err){
+    if(err) {console.log(err)}
+    else{
+      const eventEmitter = req.app.get('eventEmitter')
+      eventEmitter.emit('orderUpdated', {id:req.body.orderId, deliveryStatus: req.body.deliveryStatus})
+      res.redirect("/admin/orders")
+    }
+  })
 })
 
 module.exports = router;

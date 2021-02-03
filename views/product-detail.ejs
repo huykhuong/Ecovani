@@ -20,10 +20,12 @@
     <div class="container-fluid single-product">
       <div class="row">
         <div class="col-6 productImage">
-          <script>
+          <!-- <script>
             document.write('<a class="go-back-button" href="' + document.referrer + '"><</a>');
-          </script>
-          <img src="/product_images/<%=p.id%>/<%=p.image%>" width="100%" height="551,500px" id="productImg">
+          </script> -->
+          <p class="detailTitle">Product Details</p>
+          <p class="go-back-breadcrumb"><a href="/products"> All products</a> / <a href="/products/<%=p.category%>"><%=p.category%></a> / <%=p.title%></p>
+          <img src="/product_images/<%=p.id%>/<%=p.image%>" width="80%" height="551,500px" id="productImg">
           <div class="small-img-row">
             <% galleryImages.forEach(function(image){%>
             <%if(image != "thumbs") {%>
@@ -34,26 +36,6 @@
               <%})%>
           </div>
         </div>
-
-        <!-- Script to open small product images in the product detail page -->
-        <script type="text/javascript">
-          var productImg = document.getElementById("productImg");
-          var smallImg = document.getElementsByClassName("small-img");
-
-          smallImg[0].onclick = function(){
-            productImg.src = smallImg[0].src;
-          }
-          smallImg[1].onclick = function(){
-            productImg.src = smallImg[1].src;
-          }
-          smallImg[2].onclick = function(){
-            productImg.src = smallImg[2].src;
-          }
-          smallImg[3].onclick = function(){
-            productImg.src = smallImg[3].src;
-          }
-        </script>
-
         <div class="col-6 details">
           <nav class="navbar navbar-expand-lg">
             <div class="mr-auto"></div>
@@ -61,7 +43,7 @@
               <li class="nav-item">
                 <a class="nav-link cart" href="/cart/checkout">Cart
                   <% if (typeof cart !== "undefined") { %>
-                  <small style="color: white;" class="cart-number"><b><%= cart.length %></b></small>
+                  <small class="cart-number"><b><%= cart.length %></b></small>
                   <% } else {%>
                   <i class="fas fa-shopping-cart fa-1x"></i>
                   <% } %>
@@ -70,39 +52,131 @@
             </ul>
           </nav>
 
-          <form style="display: inline-block;" action="/cart/add/<%=p.slug%>" method="post">
+          <form class="submitToCart" action="/cart/add/<%=p.slug%>" method="post">
             <% var category = p.category.charAt(0).toUpperCase() + p.category.slice(1); %>
             <p class="category"><%=category%></p>
             <br>
             <h1 class="form-group"><%=title%></h1>
-            <h4><%=parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></h4>
+            <p class="price"><%=parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></p>
             <p class="description"><%=p.description%></p>
-            <input id="1" type="radio" class="hidebx" name="size" value="Small">
-            <label for="1" class="lbl-radio">
-              <div class="display-box">
-                <div class="size">Small</div>
-              </div>
-            </label>
-            <input id="2" type="radio" class="hidebx" name="size" value="Medium">
-            <label for="2" class="lbl-radio">
-              <div class="display-box">
-                <div class="size">Medium</div>
-              </div>
-            </label>
-            <input id="3" type="radio" class="hidebx" name="size" value="Large">
-            <label for="3" class="lbl-radio">
-              <div class="display-box">
-                <div class="size">Large</div>
-              </div>
-            </label>
-            <input id="4" type="radio" class="hidebx" name="size" value="XL">
-            <label for="4" class="lbl-radio">
-              <div class="display-box">
-                <div class="size">XL</div>
-              </div>
-            </label>
-            <p>Quantity</p>
-            <input name="quantity" type="number" value="1" min="1">
+            <div class="sizeGuide">
+              <h4>Size <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
+              <%if(p.category === "t-shirt"){%>
+              <table class="sizeTable">
+                <tr>
+                  <th class="borderless"></th>
+                  <th colspan="3">Men</th>
+                  <th colspan="3">Women</th>
+                </tr>
+                <tr>
+                  <th class="borderless">Size (cm)</th>
+                  <th class="borderless">Length</th>
+                  <th class="borderless">Shoulder</th>
+                  <th>Chest</th>
+                  <th class="borderless">Length</th>
+                  <th class="borderless">Shoulder</th>
+                  <th>Chest</th>
+                </tr>
+                <tr>
+                  <td>S</td>
+                  <td>66</td>
+                  <td>40</td>
+                  <td>98</td>
+                  <td>58</td>
+                  <td>34</td>
+                  <td>82</td>
+                </tr>
+                <tr>
+                  <td>M</td>
+                  <td>68</td>
+                  <td>42</td>
+                  <td>100</td>
+                  <td>60</td>
+                  <td>37</td>
+                  <td>84</td>
+                </tr>
+                <tr>
+                  <td>L</td>
+                  <td>70</td>
+                  <td>44</td>
+                  <td>102</td>
+                  <td>62</td>
+                  <td>38</td>
+                  <td>86</td>
+                </tr>
+                <tr>
+                  <td>XL</td>
+                  <td>72</td>
+                  <td>46</td>
+                  <td>104</td>
+                  <td>64</td>
+                  <td>40</td>
+                  <td>88</td>
+                </tr>
+              </table>
+              <%}else{%>
+              <table class="sizeTable">
+                <tr>
+                  <th class="borderless">Size (cm)</th>
+                  <th class="borderless">Sleeves</th>
+                  <th class="borderless">Chest</th>
+                  <th>Length</th>
+                </tr>
+                <tr>
+                  <td>S</td>
+                  <td>57</td>
+                  <td>55</td>
+                  <td>69</td>
+                </tr>
+                <tr>
+                  <td>M</td>
+                  <td>58</td>
+                  <td>57</td>
+                  <td>71</td>
+                </tr>
+                <tr>
+                  <td>L</td>
+                  <td>60</td>
+                  <td>60</td>
+                  <td>74</td>
+                </tr>
+                <tr>
+                  <td class="borderless">XL</td>
+                  <td>61</td>
+                  <td>62</td>
+                  <td>76</td>
+                </tr>
+              </table>
+              <%}%>
+            </div>
+            <div class="sizeOptions">
+              <input id="1" type="radio" class="hidebx" name="size" value="Small" checked>
+              <label for="1" class="lbl-radio">
+                <div class="display-box">
+                  <div class="size">S</div>
+                </div>
+              </label>
+              <input id="2" type="radio" class="hidebx" name="size" value="Medium">
+              <label for="2" class="lbl-radio">
+                <div class="display-box">
+                  <div class="size">M</div>
+                </div>
+              </label>
+              <input id="3" type="radio" class="hidebx" name="size" value="Large">
+              <label for="3" class="lbl-radio">
+                <div class="display-box">
+                  <div class="size">L</div>
+                </div>
+              </label>
+              <input id="4" type="radio" class="hidebx" name="size" value="XL">
+              <label for="4" class="lbl-radio">
+                <div class="display-box">
+                  <div class="size">XL</div>
+                </div>
+              </label>
+            </div>
+            <h4 class="quantity">Quantity</h4>
+            <input class="quantityInput" name="quantity" type="number" value="1" min="1">
             <button type="submit" class="btn btn-light px-5 py-2 add-to-cart">Add to cart</button>
           </form>
         </div>
@@ -118,37 +192,18 @@
     <section class="productPage">
       <div class="small-container">
         <div class="row">
-          <div class="col-4">
-            <a href="#">
-              <img src="assets/product-1.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-2.jpg" alt="">
-              <h4>White Sweater with Black stripes</h4>
-              <p>$30.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-3.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
+          <%relatedProducts.forEach(function(products){%>
+              <div class="col-4">
+                <a href="#">
+                  <img height="70%" src="/product_images/<%=products._id%>/<%=products.image%>" alt="">
+                  <h4><%=products.title%></h4>
+                  <p><%=products.price%></p>
+                </a>
+              </div>
+              <%})%>
+            </div>
         </div>
-    </section>
-
+        </section>
   </main>
 
   <%- include('partials/indexFooter') %>

@@ -13,6 +13,7 @@ const findOrCreate = require("mongoose-findorcreate");
 const fileUpload = require("express-fileupload");
 const path = require("path");
 const expressValidator = require("express-validator");
+const Emitter = require('events')
 
 const app = express();
 app.use(express.static("public"));
@@ -52,6 +53,10 @@ app.use(expressValidator({
     }
   }
 }));
+
+//Event Emitter
+const eventEmitter = new Emitter()
+app.set('eventEmitter', eventEmitter)
 
 //Use passport session
 app.use(session({
@@ -227,6 +232,17 @@ app.get('/auth/facebook/ecovani',
   });
 
 //APP.LISTEN()
-app.listen(3000,function(){
+const server = app.listen(3000,function(){
   console.log("App running on port 3000");
+});
+
+const io = require("socket.io")(server)
+io.on('connection', function(socket){
+  socket.on('join', function(orderId){
+    socket.join(orderId)
+  })
+})
+
+eventEmitter.on('orderUpdated', function(data){
+  io.to('order_' + data.id).emit('orderUpdated', data)
 });

@@ -6,12 +6,12 @@
       <div class="small-container">
         <div class="row row-2">
           <h2><%=title%></h2>
-          <select>
-            <option value="">Default Sorting</option>
-            <option value="">Default Sorting</option>
-            <option value="">Default Sorting</option>
-            <option value="">Default Sorting</option>
-            <option value="">Default Sorting</option>
+          <select id="sortOptionsByCat" name="sort" onchange="laByCat(this.value)">
+            <option value="http://localhost:3000/products<%=catSlug%>">Default</option>
+            <option value="http://localhost:3000/products<%=catSlug%>?sortBy=title:asce">Name (A - Z)</option>
+            <option value="http://localhost:3000/products<%=catSlug%>?sortBy=title:desc">Name (Z - A)</option>
+            <option value="http://localhost:3000/products<%=catSlug%>?sortBy=price:desc">Price (High > Low)</option>
+            <option value="http://localhost:3000/products<%=catSlug%>?sortBy=price:asce">Price (Low > High)</option>
           </select>
         </div>
 
@@ -25,78 +25,8 @@
               </a>
             </div>
           <% }); %>
-
-          <!-- <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-2.jpg" alt="">
-              <h4>White Sweater with Black stripes</h4>
-              <p>$30.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-3.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div>
-          <div class="col-4 moreBox">
-            <a href="#">
-              <img src="assets/product-4.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-            </a>
-          </div> -->
         </div>
-        <div class="page-btn">
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-          <span>&#8594;</span>
-        </div>
+        <%- include('partials/pagination') %>
       </div>
     </section>
 

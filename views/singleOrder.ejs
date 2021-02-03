@@ -1,0 +1,78 @@
+<%- include('partials/indexHeader') %>
+</header>
+
+<main>
+  <div class="small-container order-details">
+
+    <% var total = 0 %>
+    <% var sub = 0 %>
+    <% order.items.forEach(function(item){%>
+    <% sub = parseInt(item.qty * item.price)%>
+    <% total += sub %>
+    <%})%>
+
+    <input type="hidden" id="hiddenValue" value="<%= JSON.stringify(order)%>">
+
+    <div class="orderDetailRow flex-row d-flex justify-content-between">
+      <h4>Order details</h4>
+      <div class="decorator font-weight-bold">
+        <small class="label">Tracking status: </small>
+        <p id="trackingStatus" class="d-inline-block"><%=order.deliveryStatus%></p>
+      </div>
+    </div>
+
+    <div class="orderDetailRow flex-row d-flex justify-content-between">
+      <div>
+        <small class="mb-1 label">Order id</small>
+        <h4><%=order.id%></h4>
+      </div>
+      <div class="font-weight-bold">
+        <%if(order.paymentStatus === "Unpaid"){%>
+          <p class="unpaid"><%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %> &nbsp<i style="font-size:5px;" class="fa fa-circle fa-1x align-middle" aria-hidden="true"></i>&nbsp <%=order.paymentType%></p>
+          <p class="paymentStatus unpaid text-right">Unpaid</p>
+        <%}else{%>
+          <p class="paid"><%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %> &nbsp<i style="font-size:5px;" class="fa fa-circle fa-1x align-middle" aria-hidden="true"></i>&nbsp <%=order.paymentType%></p>
+          <p class="paymentStatus paid text-right">Paid</p>
+        <%}%>
+      </div>
+    </div>
+
+    <div class="orderDetailRow d-flex">
+      <div style="flex-grow:1;">
+        <small class="mb-2 label">Customer name</small>
+        <p class="labelDetails font-weight-bold"><%=order.name%></p>
+      </div>
+      <div style="flex-grow:11;">
+        <small class="label" class="mb-2">Created at</small>
+        <p class="labelDetails font-weight-bold"><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></p>
+      </div>
+    </div>
+
+    <div class="orderDetailRow">
+      <small class="mb-1 label">Shipping address</small>
+      <p class="labelDetails font-weight-bold"><%=order.address%></p>
+    </div>
+
+    <div class="orderDetailRow">
+      <h4>Items</h4>
+      <hr>
+      <div>
+          <% order.items.forEach(function(o){ %>
+            <div class="orderItemsDetails row">
+              <div class="col-sm-3">
+                <h5 class="font-weight-bold"><%=o.title%></h5>
+                <small><%=o.size%></small>
+              </div>
+                <div class="col-sm-3">
+                  <p ><%=o.qty%></p>
+                </div>
+                <div class="col-sm-3 font-weight-bold">
+                  <p><%=parseInt(o.qty * o.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></p>
+                </div>
+            </div>
+          <% }); %>
+      </div>
+    </div>
+</main>
+
+<%- include('partials/indexFooter') %>

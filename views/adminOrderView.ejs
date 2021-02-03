@@ -1,0 +1,59 @@
+<%- include('partials/adminHeader') %>
+<h2 class="page-title">All Orders</h2>
+<br><br>
+<%- include('partials/messages') %>
+
+<% if (orders.length) {%>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Orders</th>
+      <th>Customer</th>
+      <th>Address</th>
+      <th>Payment status</th>
+      <th>Delivery status</th>
+      <th>Placed at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% orders.forEach(function(order){%>
+      <tr>
+        <td>
+          <p><%= order.id%></p>
+          <% order.items.forEach(function(item){%>
+            <p><%=item.title%> (<%=item.size%>) - <%=item.qty%></p>
+          <%})%>
+        </td>
+        <td>
+          <%=order.name%>
+        </td>
+        <td><%=order.address%></td>
+        <td>
+          <form action="/orders/paymentStatus" method="post">
+            <input type="hidden" name="orderId" value="<%=order.id%>">
+            <select name="paymentStatus" onchange="this.form.submit()">
+              <option value="Unpaid" <%= order.paymentStatus === "Unpaid" ? "selected" : "" %>> Unpaid</option>
+              <option value="Paid" <%= order.paymentStatus === "Paid" ? "selected" : "" %>> Paid</option>
+            </select>
+          </form>
+        </td>
+        <td>
+          <form action="/admin/orders/deliveryStatus" method="post">
+            <input type="hidden" name="orderId" value="<%=order.id%>">
+            <select name="deliveryStatus" onchange="this.form.submit()">
+              <option value="Order_placed" <%= order.deliveryStatus === "order-placed" ? "selected" : "" %>> Placed</option>
+              <option value="Confirmed" <%= order.deliveryStatus === "Confirmed" ? "selected" : "" %>> Confirmed</option>
+            </select>
+          </form>
+        </td>
+        <td><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></td>
+      </tr>
+    <%})%>
+  </tbody>
+</table>
+
+<%} else {%>
+  <h3 class="text-center">There are no orders</h3>
+<%}%>
+<%- include('partials/adminFooter') %>

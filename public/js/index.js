@@ -1,13 +1,48 @@
+let hiddenValue = document.querySelector('#hiddenValue')
+let order = hiddenValue ? hiddenValue.value : null
+order = JSON.parse(order)
+//Socket
+let socket = io()
+//Join
+if(order){
+  socket.emit('join', 'order_' + order._id)
+}
+
+socket.on('orderUpdated', function(data){
+  const updatedOrder = {...order}
+  // updatedOrder.updatedAt = moment().format()
+  updatedOrder.status = data.deliveryStatus
+  $("#trackingStatus").html(data.deliveryStatus);
+});
+
+
+//Set initial value for select option
+if (localStorage.getItem('sortOptions')) {
+  $('#sortOptions').val(localStorage.getItem('sortOptions'));
+}
+
+if (localStorage.getItem('sortOptionsByCat')) {
+  $('#sortOptionsByCat').val(localStorage.getItem('sortOptionsByCat'));
+}
+
+function resetSort() {
+  localStorage.setItem('sortOptions', "http://localhost:3000/products");
+}
+
+function resetSortByCategory() {
+  $('#sortOptionsByCat').prop('selectedIndex',0);
+}
+
 // Sticky Navigation
 let navbar = $(".navbar");
-let navItem = $(".navbar-brand, .nav-link");
+let navItem = $(".navbar-brand, .nav-link, .nav-item i");
 
-$(window).scroll(function(){
-  let oTop = $(".section-newArrival").offset().top;
-  if($(window).scrollTop() > oTop){
+$(window).scroll(function() {
+  let oTop = $(".row .col-md-7").offset().top;
+  if ($(window).scrollTop() > oTop) {
     navbar.addClass("sticky");
     navItem.addClass("sticky-text");
-  }else{
+  } else {
     navbar.removeClass("sticky");
     navItem.removeClass("sticky-text");
   }
@@ -15,37 +50,37 @@ $(window).scroll(function(){
 
 //Show More
 $(".moreBox").slice(0, 3).show();
-    if ($(".col-4:hidden").length != 0) {
-      $("#showMore").show();
-    }
-    $("#showMore").on('click', function (e) {
-      e.preventDefault();
-      $(".moreBox:hidden").slice(0, 4).fadeIn();
-      if ($(".moreBox:hidden").length == 0) {
-        $("#showMore").hide();
-      }
+if ($(".col-4:hidden").length != 0) {
+  $("#showMore").show();
+}
+$("#showMore").on('click', function(e) {
+  e.preventDefault();
+  $(".moreBox:hidden").slice(0, 4).fadeIn();
+  if ($(".moreBox:hidden").length == 0) {
+    $("#showMore").hide();
+  }
 });
 
 //Clear cart in checkout session
 $(function() {
-    $('.clearcart').on('click', function () {
-        if (!confirm('Confirm Clear Cart'))
-            return false;
-    });
+  $('.clearcart').on('click', function() {
+    if (!confirm('Confirm Clear Cart'))
+      return false;
+  });
 });
 
 //Script to validate the checkout form
 // Example starter JavaScript for disabling form submissions if there are invalid fields
-(function () {
+(function() {
   'use strict'
 
-  window.addEventListener('load', function () {
+  window.addEventListener('load', function() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.getElementsByClassName('needs-validation')
 
     // Loop over them and prevent submission
-    Array.prototype.filter.call(forms, function (form) {
-      form.addEventListener('submit', function (event) {
+    Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
         if (form.checkValidity() === false) {
           event.preventDefault()
           event.stopPropagation()
@@ -59,15 +94,58 @@ $(function() {
 
 //Script to switch between payment methods
 /* by default hide all radio_content div elements except first element */
-			$(".radio-content .content").hide();
-			$(".radio-content .content:first-child").show();
+$(".radio-content .content").hide();
+$(".radio-content .content:first-child").show();
 
-			/* when any radio element is clicked, Get the attribute value of that clicked radio element and show the radio_content div element which matches the attribute value and hide the remaining tab content div elements */
-			$(".custom-control-input").click(function(){
-			  var current_radio = $(this).attr("id");
-			  $(".radio-content .content").hide();
-			  $("."+current_radio).show();
-			})
+/* when any radio element is clicked, Get the attribute value of that clicked radio element and show the radio_content div element which matches the attribute value and hide the remaining tab content div elements */
+$(".custom-control-input").click(function() {
+  var current_radio = $(this).attr("id");
+  $(".radio-content .content").hide();
+  $("." + current_radio).show();
+})
+
+//Script to zoom in product image
+$(function() {
+  $("#productImg").imagezoomsl();
+});
+
+// Script to open small product images in the product detail page
+var productImg = document.getElementById("productImg");
+var smallImg = document.getElementsByClassName("small-img");
+
+smallImg[0].onclick = function() {
+  productImg.src = smallImg[0].src;
+}
+smallImg[1].onclick = function() {
+  productImg.src = smallImg[1].src;
+}
+smallImg[2].onclick = function() {
+  productImg.src = smallImg[2].src;
+}
+smallImg[3].onclick = function() {
+  productImg.src = smallImg[3].src;
+}
+
+//Script for Sorting
+function la(src) {
+  localStorage.setItem('sortOptions', $('#sortOptions').val());
+  window.location.href = src;
+}
+
+function laByCat(src) {
+  localStorage.setItem('sortOptionsByCat', $('#sortOptionsByCat').val());
+  window.location.href = src;
+
+}
+
+
+// function removePageParameter(){
+//   const params = new URLSearchParams(window.location.search);
+//
+//   params.delete('page')
+//   window.location.href = window.location.pathname + params;
+//
+// }
 
 //Script for Stripe
 var stripe = Stripe('pk_test_51I80A2LgwNf2Pwu03zARTAY0GWcxdLq2eN9TO5DmXjiBZYYbRqZ5jfycbwHj0rkcclusxinKpB6NBMGQzMlZTqop00J8FPxIR2');
@@ -94,12 +172,16 @@ var style = {
 };
 
 // Create an instance of the card Element.
-var card = elements.create('card', {style: style});
+var card = elements.create('card', {
+  style: style
+});
 
 // Add an instance of the card Element into the `card-element` <div>.
 card.mount('#card-element');
 
-card.on('change', ({error}) => {
+card.on('change', ({
+  error
+}) => {
   let displayError = document.getElementById('card-errors');
   if (error) {
     displayError.textContent = error.message;
@@ -138,6 +220,10 @@ function stripeTokenHandler(token) {
   // Submit the form
   form.submit();
 }
+
+
+
+
 
 
 

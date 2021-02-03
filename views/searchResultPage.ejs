@@ -1,0 +1,36 @@
+<%- include('partials/indexHeader') %>
+</header>
+
+<main>
+  <section class="productPage">
+    <div class="small-container">
+      <div class="row row-2">
+        <h2>Search results for '<%=searchQuery%>'</h2>
+      </div>
+      <% if(noMatch === null){%>
+      <div class="row">
+        <% products.forEach(function(p){ %>
+          <div class="col-4">
+            <a href="/product/<%= p.category %>/<%= p.slug %>">
+              <img class="pimage" src="/product_images/<%= p.id %>/<%= p.image %>" alt="">
+              <h4><%= p.title %></h4>
+              <p><%= parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %></p>
+            </a>
+          </div>
+        <% }); %>
+      </div>
+    <%}else{%>
+      <div class="noProductFound">
+        <img src="/assets/sad-glass.png" alt="">
+        <h1>No products found</h1>
+        <p><%=noMatch%></p>
+        <a href="/products" type="button" name="button">Visit our store instead</a>
+      </div>
+
+      <%}%>
+    </div>
+  </section>
+
+</main>
+
+<%- include('partials/indexFooter') %>

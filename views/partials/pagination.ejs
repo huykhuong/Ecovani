@@ -1,0 +1,32 @@
+<% if (pages > 0) { %>
+<div class="page-btn">
+  <% if (current == 1) { %>
+  <span class="disabled"><a><<</a></span>
+  <% } else { %>
+  <a href="/products?page=1<%=sortBy%>"><span><<</span></a>
+  <% } %>
+  <% var i = (Number(current) > 5 ? Number(current) - 3 : 1) %>
+  <% if (i !== 1) { %>
+  <span class="disabled"><a>...</a></span>
+  <% } %>
+  <% for (; i <= (Number(current) + 1) && i <= pages; i++) { %>
+  <% if (i == current) { %>
+  <span class="active"><a><%= i %></a></span>
+  <% } else { %>
+    <%if(i===1){%>
+      <a href="/products<%=catSlug%>?page=1<%=sortBy%>"><span>1</span></a>
+    <%} else{%>
+      <a href="/products<%=catSlug%>?page=<%= i %><%=sortBy%>"><span><%= i %></span></a>
+      <%}%>
+  <% } %>
+  <% if (i == Number(current) + 3 && i < pages) { %>
+  <span class="disabled"><a>...</a></span>
+  <% } %>
+  <% } %>
+  <% if (current == pages) { %>
+  <span class="disabled"><a>>></a></span>
+  <% } else { %>
+  <a href="/products?page=<%=pages%><%=sortBy%>"><span>>></span></a>
+  <% } %>
+</div>
+<% } %>
