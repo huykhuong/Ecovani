@@ -13,6 +13,20 @@
     transition: none !important;
 }
 
+
+.cre {
+    font-size: 2em;
+}
+
+.fa-cc-visa, .fa-paypal{
+    color: #0157a2;
+  }
+
+.fa-cc-mastercard{
+  color: #e3001a;
+}
+
+
 section{
   overflow-x: hidden;
 }
@@ -63,7 +77,7 @@ header{
 }
 
 header .nav-item:last-child, .details .nav-item:last-child{
-  padding-right: 10.5em;
+  margin-right: 10.5em;
   position: relative;
 }
 
@@ -174,7 +188,7 @@ header .container .col-md-7 button, .collections .col-4 button{
 
 .section-2 .row .col-md-6 .panel p{
   font-size: 0.9em;
-  color: rgba(0,0,0,0.5);
+  opacity: 0.8;
 }
 
 /* Footer */
@@ -273,6 +287,11 @@ footer .column i+i{
 .section-newArrival .col-4 h4, .productPage .col-4 h4{
   color: #555;
   font-weight: normal;
+}
+
+.section-newArrival .col-4 .newArrivalTag{
+  background-color: #277b8c;
+  position:absolute;
 }
 
 .section-newArrival .col-4 p, .productPage .col-4 p{
@@ -404,6 +423,10 @@ select:focus{
   top: 80px;
   font-size: 20px;
   letter-spacing: 3px;
+}
+
+.single-product .details{
+  min-height: 968px;
 }
 
 .go-back-breadcrumb{
@@ -558,8 +581,6 @@ input[type=radio]:checked + .lbl-radio{
   font-family: var(--Montserrat);
   position: absolute;
   z-index: 1;
-  bottom: 30em;
-  left: 7em;
   width: 550px !important;
   visibility: hidden;
   opacity: 0;
@@ -1055,10 +1076,10 @@ button.accordion.active::before{
   position: fixed;
   top: 0;
   z-index: 9999;
-  height: 82px;
+  height: 96px;
   width: 100%;
   background: #ffffff;
-  transform: translateY(-82px);
+  transform: translateY(-96px);
   transition: transform 0.3s;
 }
 
@@ -1145,14 +1166,6 @@ button.accordion.active::before{
 .orderItemsDetails{
   border-radius: 15px;
   margin-top: 3%;
-}
-
-.orderDetailRow .decorator:after{
-  content: '|';
-  background: #224638;
-  border-radius: 5px;
-  padding: 3px 0;
-  margin-left: 5px;
 }
 
 .orderDetailRow .label{

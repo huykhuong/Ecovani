@@ -1,99 +1,42 @@
 <%- include('partials/indexHeader') %>
 
-      <div class="container text-center">
-        <div class="row">
-          <div class="col-md-7 col-sm-12">
-            <h6>AUTHOR: DAILY TUITION</h6>
-            <h1>EXCITING ADVENTURE</h1>
-            <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-            </p>
-            <button class="btn btn-light px-5 py-2" type="button" name="button">Buy now for $9.99</button>
-          </div>
-          <div class="col-md-5 col-sm-12 h-25">
-            <img src="https://product.hstatic.net/1000289385/product/mausac-xanhduong_23030r5bl1_2f3738019ca1420287450e14533a16e6_master.jpg" alt="Cardigan">
-          </div>
-        </div>
-      </div>
-    </header>
+<div class="container text-center">
+  <div class="row">
+    <div class="col-md-7 col-sm-12">
+      <h6>FEATURED PRODUCT</h6>
+      <h1><%=featuredProduct[0].title%></h1>
+      <p>
+        <%=featuredProduct[0].description%>
+      </p>
+      <a href="/product/<%= featuredProduct[0].category %>/<%= featuredProduct[0].slug %>"><button class="btn btn-light px-5 py-2" type="button" name="button">Buy now for <%=(featuredProduct[0].price).toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></button></a>
+    </div>
+    <div class="col-md-5 col-sm-12 h-25">
+      <img height="600px" src="/product_images/<%= featuredProduct[0]._id %>/<%= featuredProduct[0].image %>" alt="image">
+    </div>
+  </div>
+</div>
+</header>
 
-    <main>
-      <section class="section-newArrival">
-        <div class="small-container">
-          <h2 class="title">New Arrivals</h2>
-          <div class="row">
-            <div class="col-4">
-              <a href="#">
-              <img src="assets/product-1.jpg" alt="">
-              <h4>Blue Hoodie</h4>
-              <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-2.jpg" alt="">
-                <h4>White Sweater with Black stripes</h4>
-                <p>$30.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-3.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
-            <div class="col-4 moreBox">
-              <a href="#">
-                <img src="assets/product-4.jpg" alt="">
-                <h4>Blue Hoodie</h4>
-                <p>$50.00</p>
-              </a>
-            </div>
+<main>
+  <section class="section-newArrival">
+    <div class="small-container">
+      <h2 class="title">New Arrivals</h2>
+      <div class="row">
+        <% newArrival.forEach(function(p){%>
+        <div class="col-4 moreBox">
+          <a href="/product/<%= p.category %>/<%= p.slug %>">
+            <img class="mb-3 pimage" src="/product_images/<%= p._id %>/<%= p.image %>" alt="">
+            <h4><%=p.title%></h4>
+            <p><%= parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %></p>
+          </a>
+        </div>
+        <%})%>
+      </div>
+      <% if (newArrival.length > 4){%>
+      <div class="text-center">
         <button id="showMore" class="btn btn-light px-5 py-2" type="button" name="button">Show More</button>
-          </div>
+      </div>
+      <%}%>
         </div>
       </section>
 
@@ -107,7 +50,7 @@
                   <div class="col-8"></div>
                   <div class="col-4">
                     <h2>Ecovani Collections</h2>
-                    <a href="#"> <button class="btn btn-light px-5 py-2" type="button" name="button">See all collections</button></a>
+                    <a href="/products"> <button class="btn btn-light px-5 py-2" type="button" name="button">See all collections</button></a>
                   </div>
                 </div>
               </div>
@@ -118,7 +61,7 @@
                 <div class="row">
                   <div class="col-4">
                     <h2>Bringing you the most high-end fashions</h2>
-                    <a href="#"> <button class="btn btn-light px-5 py-2" type="button" name="button">See all collections</button></a>
+                    <a href="/products"> <button class="btn btn-light px-5 py-2" type="button" name="button">See all collections</button></a>
                   </div>
                   <div class="col-8">
                   </div>
@@ -146,15 +89,17 @@
             </div>
             <div class="col-md-6">
               <div class="panel text-left">
-                <h1>Chill</h1>
-                <p class="pt-4">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facere iure adipisci harum ducimus accusantium, repudiandae aperiam voluptatum, id ex ratione omnis reiciendis possimus officiis.</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi vitae, tenetur quidem eum aliquid vel labore !</p>
+                <h1>Our story</h1>
+                <p class="pt-4 text-justify">Welcome to Ecovani, your number one source for all things clothes. We're dedicated to giving you the very best of our products, with a focus on affordability, uniqueness and quality
+                Founded in 2020 by Huy Khuong, Ecovani has come a long way from its beginnings in a home office. When Khuong first started out, his passion and dream for everyone to have access to youthful and elegant pieces of clothing at a reasonable price drove him to work tirelessly, and gave him the impetus to turn hard work and inspiration into to a booming online store. We now serve customers all over Vietnam, and are thrilled to be a part of the vibrant fashion industry that is working everyday to help everybody dress well.</p>
+                <p class="text-justify">We hope you enjoy our products as much as we enjoy offering them to you. And thank you for visiting us.</p>
+                <p>Sincerely,</p>
+                <p class="mb-0">Huy Khuong, CEO of Ecovani</p>
               </div>
             </div>
           </div>
         </div>
       </section>
-
     </main>
 
 

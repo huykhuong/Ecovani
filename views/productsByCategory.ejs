@@ -6,13 +6,15 @@
       <div class="small-container">
         <div class="row row-2">
           <h2><%=title%></h2>
-          <select id="sortOptionsByCat" name="sort" onchange="laByCat(this.value)">
+          <span>Sort &nbsp
+          <select class="py-2" id="sortOptionsByCat" name="sort" onchange="laByCat(this.value)">
             <option value="http://localhost:3000/products<%=catSlug%>">Default</option>
             <option value="http://localhost:3000/products<%=catSlug%>?sortBy=title:asce">Name (A - Z)</option>
             <option value="http://localhost:3000/products<%=catSlug%>?sortBy=title:desc">Name (Z - A)</option>
             <option value="http://localhost:3000/products<%=catSlug%>?sortBy=price:desc">Price (High > Low)</option>
             <option value="http://localhost:3000/products<%=catSlug%>?sortBy=price:asce">Price (Low > High)</option>
           </select>
+          </span>
         </div>
 
         <div class="row">
@@ -21,7 +23,7 @@
               <a href="/product/<%= p.category %>/<%= p.slug %>">
                 <img class="pimage" src="/product_images/<%= p.id %>/<%= p.image %>" alt="">
                 <h4><%= p.title %></h4>
-                <p>$<%= parseFloat(p.price).toFixed(2) %></p>
+                <p><%= parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %></p>
               </a>
             </div>
           <% }); %>

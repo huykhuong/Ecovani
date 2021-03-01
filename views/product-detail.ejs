@@ -58,7 +58,7 @@
             <br>
             <h1 class="form-group"><%=title%></h1>
             <p class="price"><%=parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></p>
-            <p class="description"><%=p.description%></p>
+            <p class="description text-justify"><%=p.description%></p>
             <div class="sizeGuide">
               <h4>Size <i class="fa fa-question-circle" aria-hidden="true"></i></h4>
               <%if(p.category === "t-shirt"){%>
@@ -194,16 +194,16 @@
         <div class="row">
           <%relatedProducts.forEach(function(products){%>
               <div class="col-4">
-                <a href="#">
+                <a href="/product/<%= products.category %>/<%= products.slug %>">
                   <img height="70%" src="/product_images/<%=products._id%>/<%=products.image%>" alt="">
                   <h4><%=products.title%></h4>
-                  <p><%=products.price%></p>
+                  <p><%=products.price.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></p>
                 </a>
               </div>
               <%})%>
             </div>
         </div>
-        </section>
+      </section>
   </main>
 
   <%- include('partials/indexFooter') %>

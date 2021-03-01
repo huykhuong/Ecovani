@@ -1,0 +1,85 @@
+<%- include('partials/staffHeader') %>
+<h2 class="page-title">Edit a Product</h2>
+<a href="/staff/product" class="btn btn-primary">Back to all products</a>
+<br><br>
+<%- include('partials/messages') %>
+<form action="/staff/product/edit-product/<%=id%>" method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="">Title</label>
+    <input type="text" class="form-control" name="title" value="<%=title%>" placeholder="Title">
+  </div>
+  <div class="form-group">
+    <label for="">Description</label>
+    <textarea id="editCounter" name="desc" class="form-control" cols="30" rows="10" placeholder="Description"><%= desc %></textarea>
+    Total word count: <span id="display_count2">0</span> words. Words left: <span id="word_left2">53</span
+  </div>
+  <div class="form-group">
+    <label for="">Category</label>
+    <select class="form-control" name="category">
+      <% categories.forEach(function(cat){%>
+        <option value="<%=cat.slug%>"
+          <%if (cat.slug == category) {%>
+            selected = "selected"
+          <%}%>
+          ><%=cat.title%></option>
+      <%}); %>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="">Price</label>
+    <input type="text" class="form-control" name="price" value="<%=price%>" placeholder="Price">
+  </div>
+  <div class="form-group">
+    <label for="">Current Image</label>
+    <p>
+      <%if(image == "") {%>
+        <%} else{%>
+        <img id="productImg" src="/product_images/<%=id%>/<%=image%>" alt="">
+        <%}%>
+    </p>
+  </div>
+  <div class="form-group">
+    <label for="">Upload Image</label>
+    <input type="file" class="form-control" name="image" id="img">
+    <img src="#" id="imgPreview" alt="">
+  </div>
+  <input type="hidden" name="pimage" value="<%= image %>">
+  <button style="border: 1px solid #000" class="btn btn-default" type="submit">Submit</button>
+</form>
+
+<hr>
+<h3 class="page-header"> Gallery (Max 4 images)</h3>
+<ul id="gallery" class="gallery">
+  <% var first_iteration = true %>
+  <% galleryImages.forEach(function(image){%>
+  <% if(image != "thumbs") { %>
+    <li>
+      <img src="/product_images/<%=id%>/gallery/thumbs/<%=image%>" alt="">&nbsp;
+      <%if(first_iteration){%>
+        <%first_iteration = false;%>
+      <%}else{%>
+        <a class="confirmDeletion" href='/staff/product/delete-image/<%=image%>?id=<%=id%>'>Delete</a>
+      <%}%>
+    </li>
+  <%}%>
+  <%});%>
+</ul>
+
+<br><br>
+
+<form id="dropzoneForm" class="dropzone" action="/staff/product/product-gallery/<%=id%>" method="post" enctype="multipart/form-data">
+  <div class="fallback">
+    <input type="file" name="file" multiple>
+    <input type="submit" value="Upload">
+  </div>
+</form>
+
+<button style="margin-bottom: 100px; border: 1px solid #000" class="btn btn-default uploadBtn" type="button">Upload</button>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/basic.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.js"></script>
+
+
+<%- include('partials/staffFooter') %>

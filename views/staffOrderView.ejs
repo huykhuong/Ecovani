@@ -1,0 +1,93 @@
+<%- include('partials/staffHeader') %>
+<h2 class="page-title">All Orders</h2>
+<br><br>
+<%- include('partials/messages') %>
+<% if (orders.length) {%>
+<table id="order-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Orders</th>
+      <th>Customer</th>
+      <th>Address</th>
+      <th>Payment status</th>
+      <th>Delivery status</th>
+      <th>Payment method</th>
+      <th>Placed at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% orders.forEach(function(order){%>
+      <tr>
+        <td>
+          <p><%= order.id%></p>
+          <% var total = 0%>
+          <% order.items.forEach(function(item){%>
+            <% var sub = parseFloat(item.qty * item.price)%>
+            <% total += sub%>
+            <p><%=item.title%> (<%=item.size%>) - <%=item.qty%></p>
+            <%})%>
+            <b>Total: <%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></b>
+        </td>
+        <td>
+          <%=order.name%>
+        </td>
+        <td><%=order.address%></td>
+        <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Paid"){%>
+          <td>Paid</td>
+        <%}%>
+        <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Failed"){%>
+          <td>Failed</td>
+        <%}%>
+        <%if(order.paymentType === "Paypal" && order.paymentStatus === "Paid"){%>
+          <td>Paid</td>
+        <%}%>
+        <%if(order.paymentType === "Paypal" && order.paymentStatus === "Failed"){%>
+          <td>Failed</td>
+        <%}%>
+        <%if(order.paymentType === "Paypal" && order.paymentStatus === "Unpaid"){%>
+          <td>Unpaid</td>
+        <%}%>
+        <% if(order.paymentStatus == "Paid" && order.paymentType === "Cash on Delivery"){%>
+          <td>Paid</td>
+        <%}if(order.paymentStatus == "Unpaid" && order.paymentType === "Cash on Delivery"){%>
+        <td>
+          <form action="/staff/orders/paymentStatus" method="post">
+            <input type="hidden" name="orderId" value="<%=order.id%>">
+            <select name="paymentStatus" onchange="this.form.submit()">
+              <option value="Unpaid" <%= order.paymentStatus === "Unpaid" ? "selected" : "" %>> Unpaid</option>
+              <option value="Paid" <%= order.paymentStatus === "Paid" ? "selected" : "" %>> Paid</option>
+            </select>
+          </form>
+        </td>
+        <%}%>
+        <%if(order.deliveryStatus === "Cancelled Order"){%>
+          <td>Cancelled Order</td>
+        <%}%>
+        <%if(order.deliveryStatus === "Completed"){%>
+          <td>Completed</td>
+        <%}if(order.deliveryStatus !== "Completed" && order.deliveryStatus !== "Cancelled Order"){%>
+        <td>
+          <form action="/staff/orders/deliveryStatus" method="post">
+            <input type="hidden" name="orderId" value="<%=order.id%>">
+            <select name="deliveryStatus" onchange="this.form.submit()">
+              <option value="Order_placed" <%= order.deliveryStatus === "order-placed" ? "selected" : "" %>> Placed</option>
+              <option value="Confirmed" <%= order.deliveryStatus === "Confirmed" ? "selected" : "" %>> Confirmed</option>
+              <option value="Delivering" <%= order.deliveryStatus === "Delivering" ? "selected" : "" %>> Delivering</option>
+              <option value="Completed" <%= order.deliveryStatus === "Completed" ? "selected" : "" %>> Completed</option>
+            </select>
+          </form>
+        </td>
+        <%}%>
+        <td><%=order.paymentType%></td>
+        <td><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></td>
+      </tr>
+    <%})%>
+  </tbody>
+</table>
+
+<%- include('partials/ordersPagination') %>
+
+<%} else {%>
+  <h3 class="text-center">There are no orders</h3>
+<%}%>
+<%- include('partials/staffFooter') %>

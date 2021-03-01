@@ -31,20 +31,8 @@
                 <div class="dropdown-content">
                   <% categories.forEach(function(c){ %>
                   <% var slug = c.slug %>
-                  <a href="/products/<%= c.slug %>"><%= c.title %></a>
+                  <a onclick="resetSortByCategory()" href="/products/<%= c.slug %>"><%= c.title %></a>
                   <% }); %>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Product</a>
-            </li>
-            <li class="nav-item active dropdown">
-              <div class="dropdown dropdown-hover">
-                <a href="products.html" class="nav-link">Account<span class="sr-only">(current)</span></a>
-                <div class="dropdown-content">
-                  <a href="/orders">View payment history</a>
-                  <a href="/logout">Logout</a>
                 </div>
               </div>
             </li>
@@ -59,6 +47,23 @@
             </li>
             <li id="search" class="nav-item">
               <i class="fa fa-search" aria-hidden="true"></i>
+            </li>
+            <li class="nav-item">
+              <%if(user){%>
+                  <div class="dropdown dropdown-hover">
+                    <%if(user.username){%>
+                      <a class="nav-link"><%=user.username%> &nbsp; <i class="fa fa-angle-down" aria-hidden="true"></i></a>                      
+                    <%}else{%>
+                      <a class="nav-link"><%=user.displayName%> &nbsp; <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                    <%}%>
+                    <div class="dropdown-content">
+                      <a href="/orders">View payment history</a>
+                      <a href="/logout">Logout</a>
+                    </div>
+                  </div>
+              <%}else{%>
+                <i><a class="nav-link" href="/login">Not logged in</a></i>
+              <%}%>
             </li>
           </ul>
 

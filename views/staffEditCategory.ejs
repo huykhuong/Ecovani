@@ -1,0 +1,13 @@
+<%- include('partials/staffHeader') %>
+<h2 class="page-title">Edit a Category</h2>
+<a href="/staff/category" class="btn btn-primary">Back to all categories</a>
+<br><br>
+<%- include('partials/messages') %>
+<form action="/staff/category/edit-category/<%=id%>" method="post">
+  <div class="form-group">
+    <label for="">Title</label>
+    <input type="text" class="form-control" name="title" value="<%=title%>" placeholder="Title">
+  </div>
+  <button style="border: 1px solid #000" class="btn btn-default" type="submit">Submit</button>
+</form>
+<%- include('partials/staffFooter') %>

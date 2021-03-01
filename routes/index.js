@@ -4,6 +4,13 @@ const auth = require("../config/auth");
 const isUser = auth.isUser;
 const fs = require('fs-extra');
 const moment = require("moment")
+const https = require('https');
+const uuidv1 = require('uuidv1')
+const crypto = require('crypto');
+const paypal = require('paypal-rest-sdk');
+const request = require ('request');
+const querystring = require ('querystring');
+const Promise = require ('bluebird');
 
 // Get Product model
 var Product = require('../models/product');
@@ -12,9 +19,19 @@ var Category = require('../models/category');
 //Get Order model
 var Order = require('../models/order');
 
-//Get home page
+//Get home page and fetch new arrival products
 router.get("/", function(req, res) {
-  res.render("home");
+  var temp = "";
+  Product.find({}).sort({createdAt: -1}).limit(1).exec(function(err,product){
+    temp = product[0].dateCreated.slice(0,10)
+  })
+  setTimeout(function(){
+    Product.find({featured: "featured"}).exec(function(err,featuredProduct){
+      Product.find({dateCreated: temp}).sort({id: -1}).exec(function(err,products){
+        res.render("home", {newArrival: products, featuredProduct: featuredProduct});
+      })
+    })
+  },100)
 })
 
 //Get single order page
@@ -76,20 +93,22 @@ router.get("/register", function(req, res) {
 
 router.get("/logout", function(req, res) {
   req.logout();
-  res.redirect("/login");
+  res.redirect("/");
 })
 
 //GET ALL PRODUCTS with Pagination
 router.get("/products", function(req, res) {
   const sort = {}
   var sortBy = ""
-  var perPage = 4
+  var perPage = 12
   var page = req.query.page ? parseInt(req.query.page) : 1
   if (req.query.sortBy) {
     const str = req.query.sortBy.split(':')
     sort[str[0]] = str[1] === 'desc' ? -1 : 1
     sort._id = -1
     sortBy = "&sortBy=" + req.query.sortBy
+  }else{
+    sort._id = -1
   }
   Product
     .find({})
@@ -115,7 +134,7 @@ router.get('/products/:category', function(req, res) {
   var sortBy = ""
   var categorySlug = req.params.category;
   const sort = {}
-  var perPage = 8
+  var perPage = 12
   var page = req.query.page ? parseInt(req.query.page) : 1
   if (req.query.sortBy) {
     const str = req.query.sortBy.split(':')
@@ -132,7 +151,7 @@ router.get('/products/:category', function(req, res) {
       }).skip((perPage * page) - perPage)
       .limit(perPage)
       .sort(sort).exec(function(err, products) {
-        Product.countDocuments().exec(function(err, count) {
+        Product.countDocuments({category: categorySlug}).exec(function(err, count) {
           if (err)
             console.log(err);
 
@@ -202,10 +221,7 @@ router.get('/cart/checkout', function(req, res) {
     delete req.session.cart;
     res.redirect('/cart/checkout');
   } else {
-    res.render('checkout', {
-      title: 'Checkout',
-      cart: req.session.cart
-    });
+    res.render('checkout');
   }
 });
 
@@ -238,7 +254,6 @@ router.get('/cart/update/:product/:size', function(req, res) {
         }
         break;
       }
-
     }
   }
   res.redirect('/cart/checkout');
@@ -278,9 +293,89 @@ router.get("/orders", isUser, function(req, res) {
   }).exec(function(err, orders) {
     res.render("orderView", {
       orders: orders,
-      moment: moment
+      moment: moment,
     });
   })
+});
+
+//GET PAYMENT STATUS PAGE FOR PAYPAL
+router.get('/success', (req, res) => {
+  var cart = req.session.cart;
+  var total = 0;
+  var sub = 0;
+  cart.forEach(function(p){
+    sub = parseFloat(p.price * p.qty)
+    total += sub
+  });
+  const payerId = req.query.PayerID;
+  const paymentId = req.query.paymentId;
+
+  const execute_payment_json = {
+    "payer_id": payerId,
+    "transactions": [{
+        "amount": {
+            "currency": "USD",
+            "total": (total*0.000043).toString()
+        }
+    }]
+  };
+
+  paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+    if (error) {
+       res.render('cancel');
+    } else {
+      Order.find({}).sort({createdAt: -1}).limit(1).exec(function(err,order){
+        delete req.session.cart
+        setTimeout(function(){
+          res.render("paymentStatus", {
+            orderId: order[0]._id,
+            status: "success"
+          })
+        },100)
+      })
+      const eventEmitter = req.app.get('eventEmitter')
+      eventEmitter.emit('orderSuccess', {paymentStatus: "Paid"})
+    }
+  });
+});
+
+//GET PAYMENT STATUS PAGE FOR MOMO WALLET AND CASH ON DELIVERY
+router.get("/orders/result", function(req, res) {
+  var param = req.originalUrl.substring(15, req.originalUrl.indexOf("signature") -1 )
+  var decoded = decodeURIComponent(param)
+  var signature = crypto.createHmac('sha256', process.env.MOMO_SECRETKEY).update(decoded).digest('hex');
+  if(signature === req.query.signature){
+  if (Object.keys(req.query).length > 0) {
+    if (parseInt(req.query.errorCode) === 0) {
+          delete req.session.cart
+          res.render("paymentStatus", {
+            orderId: req.query.orderId,
+            status: "success"
+          })
+          const eventEmitter = req.app.get('eventEmitter')
+          eventEmitter.emit('orderSuccess', {paymentStatus: "Paid"})
+    } else {
+      res.render("paymentStatus", {
+        status: "failed"
+      })
+      const eventEmitter = req.app.get('eventEmitter')
+      eventEmitter.emit('orderFailed',{paymentStatus: "Failed", deliveryStatus: "Cancelled Order"})
+    }
+  } else {
+    Order.find().sort({
+      _id: -1
+    }).limit(1).exec(function(err, order) {
+      if (order) {
+        res.render("paymentStatus", {
+          orderId: order[0]._id,
+          status: "success"
+        })
+      }
+    });
+  }
+}else{
+  res.send("Error, Your signature and MoMo's signature do not match")
+}
 });
 
 //POST ROUTES
@@ -292,7 +387,6 @@ router.post('/cart/add/:product', function(req, res) {
   var title2 = title.replace('-', ' ')
   var quantity = req.body.quantity
   var selectedRadioBtn = req.body.size
-  console.log(selectedRadioBtn)
   Product.findOne({
     slug: slug
   }, function(err, p) {
@@ -314,7 +408,8 @@ router.post('/cart/add/:product', function(req, res) {
       for (var i = 0; i < cart.length; i++) {
         if (cart[i].title == title2) {
           if (cart[i].size == selectedRadioBtn) {
-            cart[i].qty++;
+            cart[i].qty = parseInt(cart[i].qty) + parseInt(quantity);
+            console.log(cart[i].qty)
             newItem = false;
             break;
           }
@@ -335,8 +430,8 @@ router.post('/cart/add/:product', function(req, res) {
   });
 });
 
-//POST NEW ORDER
-router.post("/orders/add", isUser, function(req, res) {
+//POST NEW ORDER for Cash on delivery method
+router.post("/orders/add", isUser, function(req, res){
   const order = new Order({
     customerId: req.user.id,
     items: req.session.cart,
@@ -352,42 +447,243 @@ router.post("/orders/add", isUser, function(req, res) {
       res.redirect("/products")
     } else {
       delete req.session.cart
-      res.redirect("/");
-      console.log("Success")
+      const eventEmitter = req.app.get('eventEmitter')
+      eventEmitter.emit('orderPlaced', order)
+      res.redirect("/orders/result")
     }
   })
 })
 
-//POST STRIPE CHARGE
-router.post("/cart/charge", function(req, res) {
-  var cart = req.session.cart;
-  var total = 0;
-  if (!cart) {
-    res.redirect("/cart/checkout");
-  }
-  cart.forEach(function(product) {
-    var sub = product.qty * product.price
-    total += sub
-  })
-  const stripe = require('stripe')(process.env.STRIPE_SECRETKEY);
 
-  // Token is created using Stripe Checkout or Elements!
-  // Get the payment token ID submitted by the form:
-  const token = req.body.stripeToken; // Using Express
+//RECEIVING INSTANT PAYMENT NOTIFICATION FROM MOMO SERVICE BY POST REQUEST
+router.post("/notify",function(req,res){
+  var param = "partnerCode=" + req.body.partnerCode +
+              "&accessKey=" + req.body.accessKey +
+              "&requestId=" + req.body.requestId +
+              "&amount=" + req.body.amount +
+              "&orderId=" + req.body.orderId +
+              "&orderInfo=" + req.body.orderInfo +
+              "&orderType=" + req.body.orderType +
+              "&transId=" + req.body.transId +
+              "&message=" + req.body.message +
+              "&localMessage=" + req.body.localMessage +
+              "&responseTime=" + req.body.responseTime +
+              "&errorCode=" + req.body.errorCode +
+              "&payType=" + req.body.payType +
+              "&extraData=" + req.body.extraData
+  var decoded = decodeURIComponent(param)
+  var signature = crypto.createHmac('sha256', process.env.MOMO_SECRETKEY).update(decoded).digest('hex');
+  if(signature === req.body.signature){
+    if (parseInt(req.body.errorCode) === 0) {
+      Order.findOneAndUpdate({_id : req.body.orderId}, {paymentStatus: "Paid"}, { useFindAndModify: false }, function(err){
+        if(err) console.log(err)
+      });
 
-  const charge = stripe.charges.create({
-    amount: total,
-    currency: 'vnd',
-    description: 'Ecovani Charge',
-    source: token
-  }, function(err, charge) {
-    if (err) {
-      console.log(err)
-      return res.redirect('/cart/checkout');
+    } else {
+      Order.findOneAndUpdate({_id : req.body.orderId}, {paymentStatus: "Failed", deliveryStatus: "Cancelled Order"}, { useFindAndModify: false }, function(err){
+        if(err) console.log(err)
+      });
+
     }
-    delete req.session.cart;
-    return res.redirect('/')
+}else{
+  res.send("Error, Your signature and MoMo's signature do not match")
+}
+});
+
+//POST MOMO Charge
+router.post("/cart/chargeMomo", function(req, res){
+  var cart = req.session.cart;
+
+  //Create order in database
+  const order = new Order({
+    customerId: req.user.id,
+    items: req.session.cart,
+    phone: req.body.phone,
+    email: req.body.email,
+    address: req.body.address,
+    name: req.body.name,
+    paymentType: "Momo Wallet"
+  })
+
+  order.save(function(err) {
+    if (err) {
+      return console.log(err);
+      res.redirect("/products")
+    } else {
+      const eventEmitter = req.app.get('eventEmitter')
+      eventEmitter.emit('orderPlaced', order)
+    }
+  })
+  var id = null;
+  setTimeout(function(){
+  //Fetch the most recent order inserted into the database to extract its id to apply in the creation of the HTTP request object to send to MOMO
+  Order.find().sort({
+    _id: -1
+  }).limit(1).exec(function(err, order){
+    id = order[0].id
+  })
+  },100)
+
+  setTimeout(function(){
+    var total = 0;
+    cart.forEach(function(product) {
+      var sub = product.qty * product.price
+      total += sub
+    })
+    var requestId = uuidv1()
+    var orderInfo = "Payment at Ecovani Apparel"
+    var returnUrl = "http://localhost:3000/orders/result"
+    var notifyUrl = "https://5eaee399d440.ngrok.io/notify"
+    var requestType = "captureMoMoWallet"
+    var orderId = id
+    var extraData = "Ecovani Apparel"
+    var rawSignature = "partnerCode=" + process.env.MOMO_PARTNERID + "&accessKey=" + process.env.MOMO_ACCESSKEY + "&requestId=" + requestId + "&amount=" + total.toString() + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&returnUrl=" + returnUrl + "&notifyUrl=" + notifyUrl + "&extraData=" + extraData
+    //puts raw signature
+
+    //signature
+    var signature = crypto.createHmac('sha256', process.env.MOMO_SECRETKEY)
+      .update(rawSignature)
+      .digest('hex');
+    console.log("--------------------SIGNATURE----------------")
+    console.log(signature)
+
+
+    //json object send to MoMo endpoint
+    var body = JSON.stringify({
+      partnerCode: process.env.MOMO_PARTNERID,
+      accessKey: process.env.MOMO_ACCESSKEY,
+      requestId: requestId,
+      amount: total.toString(),
+      orderId: id,
+      orderInfo: orderInfo,
+      returnUrl: "http://localhost:3000/orders/result",
+      notifyUrl: "https://5eaee399d440.ngrok.io/notify",
+      extraData: extraData,
+      requestType: requestType,
+      signature: signature,
+    })
+    //Create the HTTPS objects
+    var options = {
+      hostname: 'test-payment.momo.vn',
+      port: 443,
+      path: '/gw_payment/transactionProcessor',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
+      }
+    };
+
+    //Send the request and get the response
+    var str = "";
+    var req = https.request(options, (res) => {
+      console.log(`Status: ${res.statusCode}`);
+      console.log(`Headers: ${JSON.stringify(res.headers)}`);
+      res.setEncoding('utf8');
+      res.on('data', (body) => {
+        str += body;
+      });
+      res.on('end', () => {
+        console.log('No more data in response.');
+      });
+    });
+
+    req.on('error', (e) => {
+      console.log(`problem with request: ${e.message}`);
+    });
+
+    // write data to request body
+    req.write(body);
+    req.end();
+
+    setTimeout(function() {
+      //Redirect to the MOMO payment page
+      res.redirect(JSON.parse(str).payUrl)
+    }, 1000)
+    // });
+  },200)
+})
+
+
+//PAYPAL CHARGE
+paypal.configure({
+'mode': 'sandbox', //sandbox or live
+'client_id': 'AYoEdxQ3MeQntn614kfhIXCIvRy5sD4L7CzaoyGKgFuEw1ZMK11lKw9j4yCaDMR7Q_Uz33Sjf_u9LhP8',
+'client_secret': 'EOFnmdN8PxNoKOGipGRJNg0-9t-KDrUAWueQYa-N6SyInCcaQh0WZb-wmfyteTI5i1N6xrXZmV3nC0LY'
+});
+
+router.post("/cart/chargePaypal",function(req,res){
+  var cart = req.session.cart;
+  var items = []
+  var total = 0;
+  var sub = 0;
+  cart.forEach(function(p){
+    sub = parseFloat(p.price * p.qty)
+    total += sub
+    items.push({
+      "name": p.title,
+      "sku": p._id,
+      "price": parseFloat(p.price*0.000043).toString(),
+      "currency": "USD",
+      "quantity": p.qty
+    })
+  });
+
+  const order = new Order({
+    customerId: req.user.id,
+    items: req.session.cart,
+    phone: req.body.phone,
+    email: req.body.email,
+    address: req.body.address,
+    name: req.body.name,
+    paymentType: "Paypal"
+  })
+
+  order.save(function(err) {
+    if (err) {
+      return console.log(err);
+      res.redirect("/products")
+    } else {
+      const eventEmitter = req.app.get('eventEmitter')
+      eventEmitter.emit('orderPlaced', order)
+    }
+  })
+
+
+  var create_payment_json = {
+    "intent": "sale",
+    "payer": {
+        "payment_method": "paypal"
+    },
+    "redirect_urls": {
+        "return_url": "http://localhost:3000/success",
+        "cancel_url": "http://cancel.url"
+    },
+    "transactions": [{
+        "item_list": {
+            "items": items
+        },
+        "amount": {
+            "currency": "USD",
+            "total": (total*0.000043).toString()
+        },
+        "description": "Payment at Ecovani Apparel"
+    }]
+};
+
+
+  paypal.payment.create(create_payment_json, function (error, payment) {
+    if (error) {
+          throw error;
+      } else {
+        for(let i = 0;i < payment.links.length;i++){
+          if(payment.links[i].rel === 'approval_url'){
+            res.redirect(payment.links[i].href);
+          }
+        }
+      }
   });
 });
+
 
 module.exports = router;

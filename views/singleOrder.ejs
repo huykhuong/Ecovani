@@ -30,6 +30,9 @@
         <%if(order.paymentStatus === "Unpaid"){%>
           <p class="unpaid"><%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %> &nbsp<i style="font-size:5px;" class="fa fa-circle fa-1x align-middle" aria-hidden="true"></i>&nbsp <%=order.paymentType%></p>
           <p class="paymentStatus unpaid text-right">Unpaid</p>
+        <%}%>
+        <%if(order.paymentStatus === "Failed"){%>
+
         <%}else{%>
           <p class="paid"><%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %> &nbsp<i style="font-size:5px;" class="fa fa-circle fa-1x align-middle" aria-hidden="true"></i>&nbsp <%=order.paymentType%></p>
           <p class="paymentStatus paid text-right">Paid</p>

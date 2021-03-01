@@ -5,7 +5,7 @@
   <% } else { %>
   <a href="/products?page=1<%=sortBy%>"><span><<</span></a>
   <% } %>
-  <% var i = (Number(current) > 5 ? Number(current) - 3 : 1) %>
+  <% var i = (Number(current) > 1 ? Number(current) - 1 : 1) %>
   <% if (i !== 1) { %>
   <span class="disabled"><a>...</a></span>
   <% } %>
@@ -13,13 +13,13 @@
   <% if (i == current) { %>
   <span class="active"><a><%= i %></a></span>
   <% } else { %>
-    <%if(i===1){%>
-      <a href="/products<%=catSlug%>?page=1<%=sortBy%>"><span>1</span></a>
-    <%} else{%>
+    <%if(pages > 1){%>
       <a href="/products<%=catSlug%>?page=<%= i %><%=sortBy%>"><span><%= i %></span></a>
+    <%} else{%>
+
       <%}%>
   <% } %>
-  <% if (i == Number(current) + 3 && i < pages) { %>
+  <% if (i == Number(current) + 1 && i < pages) { %>
   <span class="disabled"><a>...</a></span>
   <% } %>
   <% } %>

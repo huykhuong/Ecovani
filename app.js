@@ -54,7 +54,7 @@ app.use(expressValidator({
   }
 }));
 
-//Event Emitter
+//Event Emitter of Socket.io
 const eventEmitter = new Emitter()
 app.set('eventEmitter', eventEmitter)
 
@@ -72,12 +72,6 @@ app.use(flash());
 app.use((req,res,next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error = req.flash('error');
-  next();
-})
-
-app.get('*', function(req,res,next){
-  res.locals.cart = req.session.cart;
-  res.locals.user = req.user || null;
   next();
 })
 
@@ -102,18 +96,7 @@ mongoose.connect("mongodb://localhost:27017/ecovani", {useNewUrlParser: true, us
 mongoose.set("useCreateIndex", true);
 
 //SCHEMA
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  googleId: String,
-  facebookId: String
-});
-
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(findOrCreate);
-
-const User = mongoose.model("User", userSchema);
-
+var User = require('./models/user');
 
 //Paspport uses
 passport.use(User.createStrategy());
@@ -126,7 +109,7 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, done) {
     console.log(profile);
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    User.findOrCreate({ googleId: profile.id , displayName: profile.displayName}, function (err, user) {
       return done(err, user);
     });
   }
@@ -139,7 +122,7 @@ passport.use(new FacebookStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log(profile);
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+    User.findOrCreate({ facebookId: profile.id, displayName: profile.displayName }, function (err, user) {
       return cb(err, user);
     });
   }
@@ -189,23 +172,44 @@ app.post("/register",function(req,res){
   }
 });
 
-app.post("/",function(req,res, next){
-  passport.authenticate("local", {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
-  })(req,res,next)
+//Role-based login
+app.post("/login",function(req,res, next){
+  var temp = null;
+  User.findOne({username: req.body.username},function(err,user){
+    if(err){
+      console.log(err)
+    }else{
+      if(user.role === "admin"){
+        temp = "/admin"
+      }else if(user.role === "staff"){
+        temp = "/staff"
+      }
+      else{
+        temp = "/"
+      }
+    }
+  })
+  setTimeout(function(){
+    passport.authenticate("local", {
+      successRedirect: temp,
+      failureRedirect: '/login',
+      failureFlash: true
+    })(req,res,next)
+  }, 1000)
 });
 
-app.get('*', function(req,res,next) {
-   res.locals.cart = req.session.cart;
-   res.locals.user = req.user || null;
-   next();
-});
+//Provide the user's info of a logged in session to use globally in all ejs files (view files)
+app.get('*', function(req,res,next){
+  res.locals.cart = req.session.cart;
+  res.locals.user = req.user || null;
+  next();
+})
 
 //ROUTES SETTINGS
 var index = require("./routes/index.js");
 app.use('/',index);
+var staff = require("./routes/staff.js");
+app.use('/staff',staff)
 var admin = require("./routes/admin.js");
 app.use('/admin',admin)
 
@@ -236,6 +240,7 @@ const server = app.listen(3000,function(){
   console.log("App running on port 3000");
 });
 
+//SOCKET IO CONFIGURATION
 const io = require("socket.io")(server)
 io.on('connection', function(socket){
   socket.on('join', function(orderId){
@@ -245,4 +250,16 @@ io.on('connection', function(socket){
 
 eventEmitter.on('orderUpdated', function(data){
   io.to('order_' + data.id).emit('orderUpdated', data)
+});
+
+eventEmitter.on('orderPlaced', function(data){
+  io.to('adminArea').emit('orderPlaced', data)
+});
+
+eventEmitter.on('orderFailed', function(data){
+  io.to('adminArea').emit('orderFailed',data)
+});
+
+eventEmitter.on('orderSuccess', function(data){
+  io.to('adminArea').emit('orderSuccess', data)
 });

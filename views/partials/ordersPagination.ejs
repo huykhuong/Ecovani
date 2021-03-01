@@ -1,0 +1,32 @@
+<% if (pages > 0) { %>
+<div class="page-btn">
+  <% if (current == 1) { %>
+  <span class="disabled"><a><<</a></span>
+  <% } else { %>
+  <a href="/staff/orders?page=1<%=sortBy%>"><span><<</span></a>
+  <% } %>
+  <% var i = (Number(current) > 1 ? Number(current) - 1 : 1) %>
+  <% if (i !== 1) { %>
+  <span class="disabled"><a>...</a></span>
+  <% } %>
+  <% for (; i <= (Number(current) + 1) && i <= pages; i++) { %>
+  <% if (i == current) { %>
+  <span class="active"><a><%= i %></a></span>
+  <% } else { %>
+    <%if(pages > 1){%>
+      <a href="/staff/orders<%=catSlug%>?page=<%= i %><%=sortBy%>"><span><%= i %></span></a>
+    <%} else{%>
+
+      <%}%>
+  <% } %>
+  <% if (i == Number(current) + 1 && i < pages) { %>
+  <span class="disabled"><a>...</a></span>
+  <% } %>
+  <% } %>
+  <% if (current == pages) { %>
+  <span class="disabled"><a>>></a></span>
+  <% } else { %>
+  <a href="/staff/orders?page=<%=pages%><%=sortBy%>"><span>>></span></a>
+  <% } %>
+</div>
+<% } %>

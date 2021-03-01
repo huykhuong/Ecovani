@@ -1,0 +1,24 @@
+<%- include('partials/staffHeader') %>
+<h2 class="page-title">Category</h2>
+<a href="/staff/category/add-category" class="btn btn-primary">Add a new category</a>
+<br><br>
+<%- include('partials/messages') %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% categories.forEach(function(category){%>
+      <tr>
+        <td><%= category.title%></td>
+        <td><a href="/staff/category/edit-category/<%= category._id%>">Edit</a></td>
+        <td><a href="/staff/category/delete-category/<%=category._id%>">Delete</a></td>
+      </tr>
+    <%})%>
+  </tbody>
+</table>
+<%- include('partials/staffFooter') %>

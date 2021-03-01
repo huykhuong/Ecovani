@@ -17,7 +17,7 @@
     <div class="hero">
       <div class="container" id="container">
       	<div class="form-container sign-in-container">
-      		<form action="/" method="POST">
+      		<form action="/login" method="POST">
       			<img src="assets/mainLogo (2).png" style="padding-bottom: 10px; position: absolute; top: 50px; left: 85px;">
       			<div class="social-container">
       				<a href="/auth/facebook" class="social"><i class="fab fa-facebook-f" role="button"></i></a>
@@ -25,9 +25,9 @@
       			</div>
       			<span>or sign in with your account</span>
             <%- include('partials/messages') %>
-      			<input type="text" placeholder="username" name="username"/>
-      			<input type="password" placeholder="password" name="password"/>
-      			<button style="margin-top: 30px;">Sign In</button>
+              <input type="text" placeholder="username" name="username"/>
+        			<input type="password" placeholder="password" name="password"/>
+        			<button type="submit" style="margin-top: 30px;">Sign In</button>
       		</form>
       	</div>
       	<div class="overlay-container">

@@ -6,20 +6,25 @@
       <div class="small-container">
         <div class="row row-2">
           <h2>All Products</h2>
-          <select id="sortOptions" name="sort" onchange="la(this.value)">
+          <span>Sort &nbsp
+          <select class="py-2" id="sortOptions" name="sort" onchange="la(this.value)">
             <option value="http://localhost:3000/products">Default</option>
             <option value="http://localhost:3000/products?sortBy=title:asce">Name (A - Z)</option>
             <option value="http://localhost:3000/products?sortBy=title:desc">Name (Z - A)</option>
             <option value="http://localhost:3000/products?sortBy=price:desc">Price (High > Low)</option>
             <option value="http://localhost:3000/products?sortBy=price:asce">Price (Low > High)</option>
           </select>
+          </span>
         </div>
 
         <div class="row">
           <% products.forEach(function(p){ %>
             <div class="col-4">
               <a href="/product/<%= p.category %>/<%= p.slug %>">
-                <img class="pimage" src="/product_images/<%= p.id %>/<%= p.image %>" alt="">
+                <%if(p.dateCreated === products[0].dateCreated && current === 1){%>
+                  <p class="px-3 text-white bg-danger position-absolute">New Arrival</p>
+                <%}%>
+                <img class="mb-3 pimage" src="/product_images/<%= p.id %>/<%= p.image %>" alt="">
                 <h4><%= p.title %></h4>
                 <p><%= parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %></p>
               </a>

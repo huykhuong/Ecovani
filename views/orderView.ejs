@@ -6,30 +6,37 @@
   <div class="small-container cart-page">
     <h4>Your orders</h4>
     <table>
-
       <% orders.forEach(function(order){ %>
+        <% var total = 0 %>
+        <% var sub = 0 %>
+        <% order.items.forEach(function(item){%>
+        <% sub = parseInt(item.qty * item.price)%>
+        <% total += sub %>
+        <%})%>
       <thead>
         <tr>
           <th>Order</th>
-          <th>Address</th>
+          <th>Total</th>
+          <th>Payment Type</th>
           <th>Time</th>
         </tr>
       </thead>
 
       <tr class="cartTableRow">
-        <td style="width:37%;">
+        <td class="pl-0" style="width:37%;">
           <a href="/order/<%=order.id%>"><%=order._id%></a>
         </td>
 
-        <td  style="width:20%;">
-          <%=order.address%>
+        <td class="pl-0" style="width:20%;">
+          <%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%>
         </td>
 
-        <td style="width:20%;font-weight:900;"><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></td>
+        <td class="pl-0"><%=order.paymentType%></td>
+
+        <td style="width:20%"><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></td>
       </tr>
       <% }); %>
     </table>
-
   </div>
   <% } else {%>
       <p>No order found</p>

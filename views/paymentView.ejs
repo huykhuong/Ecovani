@@ -131,13 +131,78 @@
           Checkout with Momo Pay
         </button>
         <div class="panelPayment">
-          adsafwef
+          <form action="/cart/chargeMomo" method="post" id="payment-form" class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label for="firstName">Full name</label>
+                <input name="name" type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid first name is required.
+                </div>
+              </div>
+            <div class="mb-3">
+              <label for="email">Email <span class="text-muted">(Optional)</span></label>
+              <input name="email" type="email" class="form-control" id="email" placeholder="you@example.com" required>
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="address">Address</label>
+              <input name="address" type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="telephone">Telephone</label>
+              <input name="phone" type="text" class="form-control" id="telephone" placeholder="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+              <div class="invalid-feedback">
+                Please enter your telephone number.
+              </div>
+            </div>
+
+            <button style="margin-top: 20px; color: white; background-color: #4c68e7;" class="btn btn-lg btn-block" type="submit">Pay</button>
+            </form>
         </div>
         <button class="accordion">
           Checkout with Paypal
         </button>
         <div class="panelPayment">
+          <form action="/cart/chargePaypal" method="post" id="payment-form" class="needs-validation" novalidate>
+              <div class="mb-3">
+                <label for="firstName">Full name</label>
+                <input name="name" type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid first name is required.
+                </div>
+              </div>
+            <div class="mb-3">
+              <label for="email">Email <span class="text-muted">(Optional)</span></label>
+              <input name="email" type="email" class="form-control" id="email" placeholder="you@example.com" required>
+              <div class="invalid-feedback">
+                Please enter a valid email address for shipping updates.
+              </div>
+            </div>
 
+            <div class="mb-3">
+              <label for="address">Address</label>
+              <input name="address" type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+              <div class="invalid-feedback">
+                Please enter your shipping address.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="telephone">Telephone</label>
+              <input name="phone" type="text" class="form-control" id="telephone" placeholder="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+              <div class="invalid-feedback">
+                Please enter your telephone number.
+              </div>
+            </div>
+            <button style="margin-top: 20px; color: white; background-color: #4c68e7;" class="btn btn-lg btn-block" type="submit">Pay</button>
+            </form>
         </div>
       </div>
     </div>

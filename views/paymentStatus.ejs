@@ -1,0 +1,36 @@
+<%- include('partials/indexHeader') %>
+</header>
+
+<main>
+  <%if(status === "success"){%>
+  <div class="mt-5 text-center">
+    <img src="/assets/success.png" alt="" width="230" height="230">
+    <h1 class="display-4 font-weight-normal">Thank you !</h1>
+    <p style="letter-spacing: 8px;" class="lead font-weight-light">FOR YOUR PURCHASE</p>
+  </div>
+
+  <div class="mt-5 text-center font-italic">
+    <p>Your order id is: <span class="text-primary"><%=orderId%></span></p>
+    <p>Please do constant order check up to see delivery status right on our website</p>
+  </div>
+
+  <div class="emptyCart mt-5 text-center">
+    <a href="/orders" type="button" name="button">See all orders</a>
+  </div>
+  <%}else{%>
+    <div class="mt-5 text-center">
+      <img src="/assets/declined.png" alt="" width="230" height="230">
+      <h1 class="display-4 font-weight-normal">Sorry, something went wrong !</h1>
+      <p style="letter-spacing: 8px;" class="lead font-weight-light">WE COULD NOT PROCESS YOUR PURCHASE</p>
+    </div>
+
+    <div class="emptyCart mt-5 text-center">
+      <a href="/orders" type="button" name="button">See all orders</a>
+    </div>
+  <%}%>
+
+</main>
+
+
+
+<%- include('partials/indexFooter') %>
