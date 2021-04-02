@@ -6,7 +6,7 @@
 
     <% var total = 0 %>
     <% var sub = 0 %>
-    <% order.items.forEach(function(item){%>
+    <% order.products.forEach(function(item){%>
     <% sub = parseInt(item.qty * item.price)%>
     <% total += sub %>
     <%})%>
@@ -31,19 +31,18 @@
           <p class="unpaid"><%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %> &nbsp<i style="font-size:5px;" class="fa fa-circle fa-1x align-middle" aria-hidden="true"></i>&nbsp <%=order.paymentType%></p>
           <p class="paymentStatus unpaid text-right">Unpaid</p>
         <%}%>
-        <%if(order.paymentStatus === "Failed"){%>
-
-        <%}else{%>
+        <%if(order.paymentStatus === "Paid"){%>
           <p class="paid"><%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %> &nbsp<i style="font-size:5px;" class="fa fa-circle fa-1x align-middle" aria-hidden="true"></i>&nbsp <%=order.paymentType%></p>
           <p class="paymentStatus paid text-right">Paid</p>
         <%}%>
+        <%if(order.paymentStatus === "Failed"){}%>
       </div>
     </div>
 
     <div class="orderDetailRow d-flex">
       <div style="flex-grow:1;">
         <small class="mb-2 label">Customer name</small>
-        <p class="labelDetails font-weight-bold"><%=order.name%></p>
+        <p class="labelDetails font-weight-bold"><%=order.buyerName%></p>
       </div>
       <div style="flex-grow:11;">
         <small class="label" class="mb-2">Created at</small>
@@ -53,14 +52,14 @@
 
     <div class="orderDetailRow">
       <small class="mb-1 label">Shipping address</small>
-      <p class="labelDetails font-weight-bold"><%=order.address%></p>
+      <p class="labelDetails font-weight-bold"><%=order.buyerAddress%></p>
     </div>
 
     <div class="orderDetailRow">
       <h4>Items</h4>
       <hr>
       <div>
-          <% order.items.forEach(function(o){ %>
+          <% order.products.forEach(function(o){ %>
             <div class="orderItemsDetails row">
               <div class="col-sm-3">
                 <h5 class="font-weight-bold"><%=o.title%></h5>

@@ -6,11 +6,11 @@ const orderSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-  items:{ type: Array,required: true},
-  name:{ type: String, required: true},
-  phone: {type: String, required: true},
-  address: {type: String, required: true},
-  email: {type: String, required: true},
+  products:{ type: Array,required: true},
+  buyerName:{ type: String, required: true},
+  buyerPhone: {type: String, required: true},
+  buyerAddress: {type: String, required: true},
+  buyerEmail: {type: String, required: true},
   paymentType:{type: String, default: 'Cash on Delivery'},
   paymentStatus:{type: String, default: 'Unpaid'},
   deliveryStatus:{type: String, default: 'Order_placed'}

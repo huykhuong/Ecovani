@@ -9,7 +9,7 @@
       <% orders.forEach(function(order){ %>
         <% var total = 0 %>
         <% var sub = 0 %>
-        <% order.items.forEach(function(item){%>
+        <% order.products.forEach(function(item){%>
         <% sub = parseInt(item.qty * item.price)%>
         <% total += sub %>
         <%})%>

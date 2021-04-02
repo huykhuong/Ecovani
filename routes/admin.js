@@ -44,13 +44,13 @@ router.post("/accounts", isAdmin , function(req,res){
     errors.push({msg: "Passwords do not match"});
   }
   if(errors.length > 0){
-    res.render("adminCreateAccount", {errors: errors,accounts: accounts})
+    res.render("adminCreateAccount", {errors: errors,accounts: accounts,user:req.user})
   }
   else{
   User.register({username: req.body.username, role:"staff"}, req.body.password, function(err,user){
     if(err){
       errors.push({msg: 'Username already existed'})
-      res.render("adminCreateAccount", {errors: errors,accounts: accounts});
+      res.render("adminCreateAccount", {errors: errors,accounts: accounts,user:req.user});
     }
     else{
       res.redirect("/admin/accounts");

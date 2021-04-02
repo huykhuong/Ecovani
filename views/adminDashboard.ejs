@@ -146,7 +146,7 @@
             <% var completedDelivery = 0 %>
             <%orders.forEach(function(order){%>
             <%if(order.paymentStatus !== "Failed" && order.paymentStatus !== "Unpaid"){%>
-            <%order.items.forEach(function(i){%>
+            <%order.products.forEach(function(i){%>
             <%total += parseInt(i.price * i.qty)%>
             <%})%>
             <%}%>
@@ -314,7 +314,6 @@
 
             <div class="col-lg-12 mb-4">
 
-              <!-- Project Card Example -->
               <div class="card shadow mb-7">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Products Overview</h6>
@@ -322,7 +321,6 @@
                 <div class="card-body">
                   <div class="container-fluid">
 
-                    <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">Products Table</h6>
@@ -381,7 +379,7 @@
   <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  <script src="/js/demo/datatables-demo.js"></script>
+  <script src="/js/charts/datatables-demo.js"></script>
   <!-- Custom scripts for all pages-->
   <script src="/js/sb-admin-2.min.js"></script>
 
@@ -392,10 +390,10 @@
 
 
   <!-- Page level custom scripts -->
-  <script src="/js/demo/chart-area-demo.js"></script>
-  <script src="/js/demo/chart-pie-demo.js"></script>
-  <script src="js/demo/chart-bar-demo.js"></script>
-  <script src="js/demo/chart-polar.js"></script>
+  <script src="/js/charts/chart-area-demo.js"></script>
+  <script src="/js/charts/chart-pie-demo.js"></script>
+  <script src="js/charts/chart-bar-demo.js"></script>
+  <script src="js/charts/chart-polar.js"></script>
 
 </body>
 

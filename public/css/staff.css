@@ -1,0 +1,47 @@
+/* STAFF PAGES */
+@import url("https://fonts.googleapis.com/css?family=Acmel|Lobster|Patua+One|Rubik|Sniglet");
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+section{
+  overflow-x: hidden;
+}
+
+.admin{
+  padding-top: 6em;
+}
+
+.container-fluid{
+  padding: 0 15em;
+}
+
+.page-title{
+  padding-bottom: 10px;
+}
+
+#imgPreview{
+  margin: 20px;
+}
+
+#productImg{
+  width: 100px;
+  height: 100px;
+}
+
+ul.gallery{
+  padding: 0;
+}
+
+ul.gallery li:first-child{
+  margin-left: 0;
+}
+
+ul.gallery li{
+  margin: 20px;
+  display: inline-block;
+  list-style: none;
+}

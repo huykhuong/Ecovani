@@ -183,7 +183,7 @@ router.get('/delete-product/:id', isStaff , function(req, res) {
 
 //Get all orders
 router.get("/orders", isStaff ,function(req,res){
-  var perPage = 20;
+  var perPage = 30;
   var page = req.query.page ? parseInt(req.query.page) : 1
   var sortBy = ""
   Order
@@ -412,7 +412,7 @@ router.post("/product/add-product", isStaff , function(req, res) {
         });
 
         if(featured === "featured"){
-          Product.updateMany( {featured : "featured" }, {featured: "notFeatured"}, function(err){
+          Product.findOneAndUpdate({featured : "featured" }, {featured: "notFeatured"}, { useFindAndModify: false }, function(err){
             if(err) console.log(err)
           });
         }

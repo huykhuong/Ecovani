@@ -2,6 +2,9 @@
 <h2 class="page-title">All Orders</h2>
 <br><br>
 <%- include('partials/messages') %>
+<div align="center">
+  <input type="text" name="orderSearchBar" id="orderSearchBar" placeholder="Search" class="form-control" autocomplete="false"/>
+</div>
 <% if (orders.length) {%>
 <table id="order-table" class="table table-striped">
   <thead>
@@ -21,7 +24,7 @@
         <td>
           <p><%= order.id%></p>
           <% var total = 0%>
-          <% order.items.forEach(function(item){%>
+          <% order.products.forEach(function(item){%>
             <% var sub = parseFloat(item.qty * item.price)%>
             <% total += sub%>
             <p><%=item.title%> (<%=item.size%>) - <%=item.qty%></p>
@@ -29,9 +32,9 @@
             <b>Total: <%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></b>
         </td>
         <td>
-          <%=order.name%>
+          <%=order.buyerName%>
         </td>
-        <td><%=order.address%></td>
+        <td><%=order.buyerAddress%></td>
         <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Paid"){%>
           <td>Paid</td>
         <%}%>
@@ -43,9 +46,6 @@
         <%}%>
         <%if(order.paymentType === "Paypal" && order.paymentStatus === "Failed"){%>
           <td>Failed</td>
-        <%}%>
-        <%if(order.paymentType === "Paypal" && order.paymentStatus === "Unpaid"){%>
-          <td>Unpaid</td>
         <%}%>
         <% if(order.paymentStatus == "Paid" && order.paymentType === "Cash on Delivery"){%>
           <td>Paid</td>
@@ -90,4 +90,33 @@
 <%} else {%>
   <h3 class="text-center">There are no orders</h3>
 <%}%>
+
+
 <%- include('partials/staffFooter') %>
+
+<script>
+     $(document).ready(function(){
+          $('#orderSearchBar').keyup(function(){
+               search_table($(this).val());
+          });
+          function search_table(value){
+               $('#order-table tbody tr').each(function(){
+                    var found = 'false';
+                    $(this).each(function(){
+                         if($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0)
+                         {
+                              found = 'true';
+                         }
+                    });
+                    if(found == 'true')
+                    {
+                         $(this).show();
+                    }
+                    else
+                    {
+                         $(this).hide();
+                    }
+               });
+          }
+     });
+</script>
