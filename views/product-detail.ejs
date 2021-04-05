@@ -23,7 +23,7 @@
           <!-- <script>
             document.write('<a class="go-back-button" href="' + document.referrer + '"><</a>');
           </script> -->
-          <p class="detailTitle">Product Details</p>
+          <p class="detailTitle"><a class="text-dark" href="javascript:history.back()"><i class="fas fa-chevron-left mr-2"></i></a> Product Details</p>
           <p class="go-back-breadcrumb"><a href="/"> Home</a> / <a href="/products"> All products</a> / <a href="/products/<%=p.category%>"><%=p.category%></a> / <%=p.title%></p>
           <img class="mb-2" src="/product_images/<%=p.id%>/<%=p.image%>" width="75%" height="74%" id="productImg">
           <div class="small-img-row">

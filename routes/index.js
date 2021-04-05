@@ -275,7 +275,7 @@ router.get('/cart/clear', function(req, res) {
 });
 
 //GET PAYMENT VIEW
-router.get("/cart/payment", function(req, res) {
+router.get("/cart/payment", isUser ,function(req, res) {
   var total = 0;
   var cart = req.session.cart;
   if (!cart) {
