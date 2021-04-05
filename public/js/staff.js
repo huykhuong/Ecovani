@@ -22,7 +22,7 @@ socket.on('orderPlaced', function(data){
   cell1.innerHTML = "<p>" + data._id + "</p>" +
                     string +
                     "<b>Total: " +  total.toLocaleString('en-US', {style: 'currency', currency: 'VND'}) + "</b>";
-  cell2.innerHTML = "<p>" + data.buyerName + "</p>";
+  cell2.innerHTML = "<p>" + data.buyerName + "</p>" + "<p>" + data.buyerPhone + "</p>" + "<p>" + data.buyerEmail + "</p>";
   cell3.innerHTML = "<p>" + data.buyerAddress + "</p>";
   if(data.paymentType === "Momo Wallet"){
     cell4.innerHTML = "<p>" + data.paymentStatus + "</p>";
@@ -31,21 +31,23 @@ socket.on('orderPlaced', function(data){
     cell4.innerHTML = "<p>" + data.paymentStatus + "</p>";
   }
   if(data.paymentType === "Cash on Delivery"){
-    cell4.innerHTML = "<form action='/admin/orders/paymentStatus' method='post'>" +
+    cell4.innerHTML = "<form action='/staff/orders/paymentStatus' method='post'>" +
       '<input type="hidden" name="orderId" value=' + data._id + '>'+
       '<select name="paymentStatus" onchange="this.form.submit()">'+
         '<option value="Unpaid" data.paymentStatus === "Unpaid" ? "selected" : "" > Unpaid</option>'+
         '<option value="Paid" data.paymentStatus === "Paid" ? "selected" : ""> Paid</option>'+
+        '<option value="Failed" data.paymentStatus === "Failed" ? "selected" : ""> Failed</option>'+
       '</select>'+
       "</form>"
   }
-  cell5.innerHTML = '<form action="/admin/orders/deliveryStatus" method="post">' +
+  cell5.innerHTML = '<form action="/staff/orders/deliveryStatus" method="post">' +
     '<input type="hidden" name="orderId" value=' + data._id + '>'+
     '<select name="deliveryStatus" onchange="this.form.submit()">' +
       '<option value="Order_placed" order.deliveryStatus === "order-placed" ? "selected" : "" > Placed</option>' +
       '<option value="Confirmed" order.deliveryStatus === "Confirmed" ? "selected" : "" > Confirmed</option>' +
       '<option value="Delivering" order.deliveryStatus === "Delivering" ? "selected" : "" > Delivering</option>' +
       '<option value="Completed" order.deliveryStatus === "Completed" ? "selected" : "" > Completed</option>' +
+      '<option value="Cancelled Order" order.deliveryStatus === "Cancelled Order" ? "selected" : "" > Cancelled Order</option>' +
     '</select>' +
   '</form>'
   cell6.innerHTML = "<p>" + data.paymentType + "</p>";

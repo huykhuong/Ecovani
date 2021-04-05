@@ -3,14 +3,14 @@
 <br><br>
 <%- include('partials/messages') %>
 <div align="center">
-  <input type="text" name="orderSearchBar" id="orderSearchBar" placeholder="Search" class="form-control" autocomplete="false"/>
+  <input type="text" name="orderSearchBar" id="orderSearchBar" placeholder="Search" class="form-control" autocomplete="false" />
 </div>
 <% if (orders.length) {%>
 <table id="order-table" class="table table-striped">
   <thead>
     <tr>
       <th>Orders</th>
-      <th>Customer</th>
+      <th>Customer's Name / Telephone / Email</th>
       <th>Address</th>
       <th>Payment status</th>
       <th>Delivery status</th>
@@ -20,67 +20,79 @@
   </thead>
   <tbody>
     <% orders.forEach(function(order){%>
-      <tr>
-        <td>
-          <p><%= order.id%></p>
-          <% var total = 0%>
-          <% order.products.forEach(function(item){%>
-            <% var sub = parseFloat(item.qty * item.price)%>
-            <% total += sub%>
-            <p><%=item.title%> (<%=item.size%>) - <%=item.qty%></p>
-            <%})%>
-            <b>Total: <%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></b>
-        </td>
-        <td>
-          <%=order.buyerName%>
-        </td>
-        <td><%=order.buyerAddress%></td>
-        <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Paid"){%>
-          <td>Paid</td>
-        <%}%>
+    <tr>
+      <td>
+        <p id=<%=order.id%>><%= order.id%></p>
+        <% var total = 0%>
+        <% order.products.forEach(function(item){%>
+        <% var sub = parseFloat(item.qty * item.price)%>
+        <% total += sub%>
+        <p><%=item.title%> (<%=item.size%>) - <%=item.qty%></p>
+        <%})%>
+        <b>Total: <%=total.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></b>
+      </td>
+      <td>
+        <p><%=order.buyerName%></p>
+        <p><%=order.buyerPhone%></p>
+        <p><%=order.buyerEmail%></p>
+      </td>
+      <td><%=order.buyerAddress%></td>
+      <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Paid"){%>
+      <td>Paid</td>
+      <%}%>
+      <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Unpaid"){%>
+      <td>Unpaid</td>
+      <%}%>
         <%if(order.paymentType === "Momo Wallet" && order.paymentStatus === "Failed"){%>
-          <td>Failed</td>
-        <%}%>
+      <td>Failed</td>
+      <%}%>
         <%if(order.paymentType === "Paypal" && order.paymentStatus === "Paid"){%>
-          <td>Paid</td>
-        <%}%>
+      <td>Paid</td>
+      <%}%>
+      <%if(order.paymentType === "Paypal" && order.paymentStatus === "Unpaid"){%>
+      <td>Unpaid</td>
+      <%}%>
         <%if(order.paymentType === "Paypal" && order.paymentStatus === "Failed"){%>
-          <td>Failed</td>
-        <%}%>
-        <% if(order.paymentStatus == "Paid" && order.paymentType === "Cash on Delivery"){%>
-          <td>Paid</td>
-        <%}if(order.paymentStatus == "Unpaid" && order.paymentType === "Cash on Delivery"){%>
-        <td>
-          <form action="/staff/orders/paymentStatus" method="post">
-            <input type="hidden" name="orderId" value="<%=order.id%>">
-            <select name="paymentStatus" onchange="this.form.submit()">
-              <option value="Unpaid" <%= order.paymentStatus === "Unpaid" ? "selected" : "" %>> Unpaid</option>
-              <option value="Paid" <%= order.paymentStatus === "Paid" ? "selected" : "" %>> Paid</option>
-            </select>
-          </form>
-        </td>
-        <%}%>
+      <td>Failed</td>
+      <%}%>
+      <% if(order.paymentStatus == "Failed" && order.paymentType === "Cash on Delivery"){%>
+      <td>Failed</td>
+      <%}if(order.paymentStatus == "Paid" && order.paymentType === "Cash on Delivery"){%>
+      <td>Paid</td>
+      <%}if(order.paymentStatus == "Unpaid" && order.paymentType === "Cash on Delivery"){%>
+      <td>
+        <form action="/staff/orders/paymentStatus" method="post">
+          <input type="hidden" name="orderId" value="<%=order.id%>">
+          <select name="paymentStatus" onchange="this.form.submit()">
+            <option value="Unpaid" <%= order.paymentStatus === "Unpaid" ? "selected" : "" %>> Unpaid</option>
+            <option value="Paid" <%= order.paymentStatus === "Paid" ? "selected" : "" %>> Paid</option>
+            <option value="Failed" <%= order.paymentStatus === "Failed" ? "selected" : "" %>> Failed</option>
+          </select>
+        </form>
+      </td>
+      <%}%>
         <%if(order.deliveryStatus === "Cancelled Order"){%>
-          <td>Cancelled Order</td>
-        <%}%>
+      <td>Cancelled Order</td>
+      <%}%>
         <%if(order.deliveryStatus === "Completed"){%>
-          <td>Completed</td>
-        <%}if(order.deliveryStatus !== "Completed" && order.deliveryStatus !== "Cancelled Order"){%>
-        <td>
-          <form action="/staff/orders/deliveryStatus" method="post">
-            <input type="hidden" name="orderId" value="<%=order.id%>">
-            <select name="deliveryStatus" onchange="this.form.submit()">
-              <option value="Order_placed" <%= order.deliveryStatus === "order-placed" ? "selected" : "" %>> Placed</option>
-              <option value="Confirmed" <%= order.deliveryStatus === "Confirmed" ? "selected" : "" %>> Confirmed</option>
-              <option value="Delivering" <%= order.deliveryStatus === "Delivering" ? "selected" : "" %>> Delivering</option>
-              <option value="Completed" <%= order.deliveryStatus === "Completed" ? "selected" : "" %>> Completed</option>
-            </select>
-          </form>
-        </td>
-        <%}%>
+      <td>Completed</td>
+      <%}if(order.deliveryStatus !== "Completed" && order.deliveryStatus !== "Cancelled Order"){%>
+      <td id="deliveryStatus">
+        <form id="updateDeliveryStatus" action="/staff/orders/deliveryStatus" method="post">
+          <input type="hidden" id="orderId" name="orderId" value="<%=order.id%>">
+          <select name="deliveryStatus" onchange="this.form.submit()">
+            <option value="Order_placed" <%= order.deliveryStatus === "order-placed" ? "selected" : "" %>> Placed</option>
+            <option value="Confirmed" <%= order.deliveryStatus === "Confirmed" ? "selected" : "" %>> Confirmed</option>
+            <option value="Delivering" <%= order.deliveryStatus === "Delivering" ? "selected" : "" %>> Delivering</option>
+            <option value="Completed" <%= order.deliveryStatus === "Completed" ? "selected" : "" %>> Completed</option>
+            <option value="Cancelled Order" <%= order.deliveryStatus === "Cancelled Order" ? "selected" : "" %>> Cancelled Order</option>
+          </select>
+        </form>
+      </td>
+      <%}%>
         <td><%=order.paymentType%></td>
-        <td><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></td>
-      </tr>
+      <td><%= moment(order.createdAt).format('MMMM Do YYYY, hh:mm  A') %></td>
+    </tr>
     <%})%>
   </tbody>
 </table>
@@ -88,35 +100,45 @@
 <%- include('partials/ordersPagination') %>
 
 <%} else {%>
-  <h3 class="text-center">There are no orders</h3>
+<h3 class="text-center">There are no orders</h3>
 <%}%>
 
 
 <%- include('partials/staffFooter') %>
 
 <script>
-     $(document).ready(function(){
-          $('#orderSearchBar').keyup(function(){
-               search_table($(this).val());
-          });
-          function search_table(value){
-               $('#order-table tbody tr').each(function(){
-                    var found = 'false';
-                    $(this).each(function(){
-                         if($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0)
-                         {
-                              found = 'true';
-                         }
-                    });
-                    if(found == 'true')
-                    {
-                         $(this).show();
-                    }
-                    else
-                    {
-                         $(this).hide();
-                    }
-               });
+  //SEARCH BAR OF THE ALL ORDERS PAGE
+  $(document).ready(function() {
+    $('#orderSearchBar').keyup(function() {
+      search_table($(this).val());
+    });
+
+    function search_table(value) {
+      $('#order-table tbody tr').each(function() {
+        var found = 'false';
+        $(this).each(function() {
+          if ($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+            found = 'true';
           }
-     });
+        });
+        if (found == 'true') {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    }
+  });
+
+  //FUNCTION TO SAVE THE SCROLL POSITION OF THE ALL ORDER PAGE TO AVOID LETTING THE PAGE JUMPS BACK TO THE TOP AFTER CHANGING DELIVERY/PAYMENT STATUS
+  //THIS IS UNIQUE FOR ALL ORDER PAGE
+  $(window).scroll(function() {
+    //set scroll position in session storage
+    sessionStorage.scrollPos = $(window).scrollTop();
+  });
+  var init = function() {
+    //get scroll position in session storage
+    $(window).scrollTop(sessionStorage.scrollPos || 0)
+  };
+  window.onload = init;
 </script>

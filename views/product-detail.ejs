@@ -24,13 +24,13 @@
             document.write('<a class="go-back-button" href="' + document.referrer + '"><</a>');
           </script> -->
           <p class="detailTitle">Product Details</p>
-          <p class="go-back-breadcrumb"><a href="/products"> All products</a> / <a href="/products/<%=p.category%>"><%=p.category%></a> / <%=p.title%></p>
-          <img src="/product_images/<%=p.id%>/<%=p.image%>" width="80%" height="551,500px" id="productImg">
+          <p class="go-back-breadcrumb"><a href="/"> Home</a> / <a href="/products"> All products</a> / <a href="/products/<%=p.category%>"><%=p.category%></a> / <%=p.title%></p>
+          <img class="mb-2" src="/product_images/<%=p.id%>/<%=p.image%>" width="75%" height="74%" id="productImg">
           <div class="small-img-row">
-            <% galleryImages.forEach(function(image){%>
+            <% galleryImages.slice().reverse().forEach(function(image){%>
             <%if(image != "thumbs") {%>
             <div class="small-img-col">
-              <img src="/product_images/<%=p.id%>/gallery/<%=image%>" width="100%" height="132px" class="small-img">
+              <img src="/product_images/<%=p.id%>/gallery/<%=image%>" width="100%" height="75%" class="small-img">
             </div>
             <%}%>
               <%})%>
@@ -195,7 +195,7 @@
           <%relatedProducts.forEach(function(products){%>
               <div class="col-4">
                 <a href="/product/<%= products.category %>/<%= products.slug %>">
-                  <img height="70%" src="/product_images/<%=products._id%>/<%=products.image%>" alt="">
+                  <img class="mb-3 pimage" src="/product_images/<%=products._id%>/<%=products.image%>" alt="">
                   <h4><%=products.title%></h4>
                   <p><%=products.price.toLocaleString('en-US', {style: 'currency', currency: 'VND'})%></p>
                 </a>
@@ -207,3 +207,22 @@
   </main>
 
   <%- include('partials/indexFooter') %>
+
+  <script>
+  // Script to open small product images in the product detail page
+  var productImg = document.getElementById("productImg");
+  var smallImg = document.getElementsByClassName("small-img");
+
+  smallImg[0].onclick = function() {
+    productImg.src = smallImg[0].src;
+  }
+  smallImg[1].onclick = function() {
+    productImg.src = smallImg[1].src;
+  }
+  smallImg[2].onclick = function() {
+    productImg.src = smallImg[2].src;
+  }
+  smallImg[3].onclick = function() {
+    productImg.src = smallImg[3].src;
+  }
+  </script>

@@ -30,7 +30,7 @@
         <div class="col-4 moreBox">
           <a href="/product/<%= p.category %>/<%= p.slug %>">
             <img class="mb-3 pimage" src="/product_images/<%= p._id %>/<%= p.image %>" alt="">
-            <h4><%=p.title%></h4>
+            <h4 class="mb-3"><%=p.title%></h4>
             <p><%= parseFloat(p.price).toLocaleString('en-US', {style: 'currency', currency: 'VND'}) %></p>
           </a>
         </div>

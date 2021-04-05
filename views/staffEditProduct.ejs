@@ -51,7 +51,7 @@
 <h3 class="page-header"> Gallery (Max 4 images)</h3>
 <ul id="gallery" class="gallery">
   <% var first_iteration = true %>
-  <% galleryImages.forEach(function(image){%>
+  <% galleryImages.slice().reverse().forEach(function(image){%>
   <% if(image != "thumbs") { %>
     <li>
       <img src="/product_images/<%=id%>/gallery/thumbs/<%=image%>" alt="">&nbsp;

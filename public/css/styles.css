@@ -99,12 +99,12 @@ header .nav-link:hover{
 }
 
 header .row .col-md-5{
-  padding: 10vmin 1vmin;
+  padding: 13vmin 1vmin;
 }
 
 header .row .col-md-7{
   padding: 15vmin 1vmin;
-  padding-bottom: 35vmin;
+  padding-bottom: 27vmin;
   font-family: var(--Rubik)
 }
 
@@ -118,7 +118,7 @@ header .container .col-md-7 h6{
 }
 
 header .container .col-md-7 h1{
-  font-size: 8vmin;
+  font-size: 6vmin;
   font-weight: bold;
   padding: 0.1em 0em;
 }
@@ -252,7 +252,7 @@ footer .column i+i{
   padding: 10px;
   min-width: 200px;
   height: 363px;
-  margin-bottom: 50px;
+  margin-bottom: 180px;
   transition: transform 0.5s;
 }
 
@@ -372,12 +372,12 @@ footer .column i+i{
 /* All Product Page exclusive's customization */
 .pimage{
   width: 262px;
-  height: 262px;
+  height: 350px;
 }
 
 .row-2{
   justify-content: space-between;
-  margin: 100px auto 7px;
+  margin: 30px auto 7px;
 }
 
 select{
@@ -426,7 +426,7 @@ select:focus{
 }
 
 .single-product .details{
-  min-height: 968px;
+  max-height: 1150px;
 }
 
 .go-back-breadcrumb{

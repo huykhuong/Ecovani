@@ -24,7 +24,9 @@ var Order = require('../models/order');
 router.get("/", function(req, res) {
   var temp = "";
   Product.find({}).sort({createdAt: -1}).limit(1).exec(function(err,product){
-    temp = product[0].dateCreated.slice(0,10)
+    if(product.length !== 0){
+      temp = product[0].dateCreated.slice(0,10)
+    }
   })
   setTimeout(function(){
     Product.find({featured: "featured"}).exec(function(err,featuredProduct){
@@ -351,7 +353,8 @@ router.get('/paypal/status/:id', (req, res) => {
 
 //GET PAYMENT STATUS PAGE FOR MOMO WALLET AND CASH ON DELIVERY
 router.get("/orders/result", function(req, res) {
-  var param = req.originalUrl.substring(15, req.originalUrl.indexOf("signature") -1 )
+  var param = req.originalUrl.substring(req.originalUrl.indexOf("?") + 1, req.originalUrl.indexOf("signature") -1 )
+  console.log(param)
   var decoded = decodeURIComponent(param)
   var signature = crypto.createHmac('sha256', process.env.MOMO_SECRETKEY).update(decoded).digest('hex');
   if(Object.keys(req.query).length === 0) {
@@ -366,8 +369,7 @@ router.get("/orders/result", function(req, res) {
       }
     });
   }
-  else if(signature === req.query.signature){
-  if (Object.keys(req.query).length > 0) {
+  else if(signature === req.query.signature && Object.keys(req.query).length > 0){
     if (parseInt(req.query.errorCode) === 0) {
           delete req.session.cart
           res.render("paymentStatus", {
@@ -384,7 +386,6 @@ router.get("/orders/result", function(req, res) {
       const eventEmitter = req.app.get('eventEmitter')
       eventEmitter.emit('orderFailed',{paymentStatus: "Failed", deliveryStatus: "Cancelled Order"})
     }
-  }
 }else{
   res.send("Error, Your signature and MoMo's signature do not match")
 }

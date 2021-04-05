@@ -569,7 +569,9 @@ router.post('/orders/deliveryStatus', isStaff ,function(req,res){
     else{
       const eventEmitter = req.app.get('eventEmitter')
       eventEmitter.emit('orderUpdated', {id:req.body.orderId, deliveryStatus: req.body.deliveryStatus})
-      res.redirect("/staff/orders")
+      res.redirect('back')
+      // console.log(req.body.link)
+      // console.log(decodeURIComponent(req.body.link))
     }
   })
 })
@@ -581,7 +583,7 @@ router.post('/orders/paymentStatus',function(req,res){
     else{
       const eventEmitter = req.app.get('eventEmitter')
       eventEmitter.emit('orderUpdated', {id:req.body.orderId, paymentStatus: req.body.paymentStatus})
-      res.redirect("/staff/orders")
+      res.redirect("back")
     }
   })
 })

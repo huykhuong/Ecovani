@@ -9,21 +9,20 @@ Chart.defaults.global.defaultFontColor = '#858796';
 var hoodie = 0;
 var sweater = 0;
 var pants = 0;
-var polo = 0;
+var shirt = 0;
 var tshirt = 0;
 
 orders6.forEach(function(order){
   if(order.paymentStatus !== "Failed" && order.paymentStatus !== "Unpaid"){
     order.products.forEach(function(item){
       if(item.title.includes("Hoodie")) {
-        console.log("sd")
         hoodie += 1
       }
-      if(item.title.includes("T-Shirt")) {
+      if(item.title.includes("T-Shirts")) {
         tshirt += 1
       }
-      if(item.title.includes("Polos")) {
-        polo += 1
+      if(item.title.includes("Shirts")) {
+        shirt += 1
       }
       if(item.title.includes("Sweater")) {
         sweater += 1
@@ -43,7 +42,7 @@ var data = {
             sweater,
             pants,
             tshirt,
-            polo
+            shirt
         ],
         backgroundColor: [
             "#FF6384",
@@ -55,11 +54,11 @@ var data = {
         label: 'My dataset' // for legend
     }],
     labels: [
-        "Hoodie",
-        "Sweater",
+        "Hoodies",
+        "Sweaters",
         "Pants",
-        "T-Shirt",
-        "Polo"
+        "T-Shirts",
+        "Shirts"
     ]
 };
 var ctx = $("#myPolarChart");
