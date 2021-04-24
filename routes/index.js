@@ -25,7 +25,7 @@ router.get("/", function(req, res) {
   var temp = "";
   Product.find({}).sort({createdAt: -1}).limit(1).exec(function(err,product){
     if(product.length !== 0){
-      temp = product[0].dateCreated.slice(0,10)
+      temp = product[0].dateCreated
     }
   })
   setTimeout(function(){
@@ -371,6 +371,9 @@ router.get("/orders/result", function(req, res) {
   }
   else if(signature === req.query.signature && Object.keys(req.query).length > 0){
     if (parseInt(req.query.errorCode) === 0) {
+        Order.findOneAndUpdate({_id : req.query.orderId}, {paymentStatus: "Paid"}, { useFindAndModify: false }, function(err){
+          if(err) console.log(err)
+        });
           delete req.session.cart
           res.render("paymentStatus", {
             orderId: req.query.orderId,
@@ -383,6 +386,9 @@ router.get("/orders/result", function(req, res) {
       res.render("paymentStatus", {
         status: "failed"
       })
+        Order.findOneAndUpdate({_id : req.query.orderId}, {paymentStatus: "Failed", deliveryStatus: "Cancelled Order"}, { useFindAndModify: false }, function(err){
+          if(err) console.log(err)
+        });
       const eventEmitter = req.app.get('eventEmitter')
       eventEmitter.emit('orderFailed',{paymentStatus: "Failed", deliveryStatus: "Cancelled Order"})
     }
@@ -506,17 +512,10 @@ router.post("/notify",function(req,res){
   var decoded = decodeURIComponent(param)
   var signature = crypto.createHmac('sha256', process.env.MOMO_SECRETKEY).update(decoded).digest('hex');
   if(signature === req.body.signature){
-    if (parseInt(req.body.errorCode) === 0) {
-      Order.findOneAndUpdate({_id : req.body.orderId}, {paymentStatus: "Paid"}, { useFindAndModify: false }, function(err){
-        if(err) console.log(err)
-      });
 
-    } else {
-      Order.findOneAndUpdate({_id : req.body.orderId}, {paymentStatus: "Failed", deliveryStatus: "Cancelled Order"}, { useFindAndModify: false }, function(err){
-        if(err) console.log(err)
-      });
 
-    }
+
+
 }else{
   res.send("Error, Your signature and MoMo's signature do not match")
 }
@@ -629,7 +628,7 @@ router.post("/cart/chargeMomo", function(req, res){
     req.write(body);
     req.end();
     // });
-  },200)
+  },1000)
   setTimeout(function() {
     //Redirect to the MOMO payment page
     res.redirect(JSON.parse(str).payUrl)
@@ -690,9 +689,10 @@ router.post("/cart/chargePaypal",function(req,res){
   }).limit(1).exec(function(err, order){
     id = order[0]._id
   })
-  },100)
+},1000)
 
   setTimeout(function(){
+    console.log(id)
     var create_payment_json = {
       "intent": "sale",
       "payer": {
@@ -727,7 +727,7 @@ router.post("/cart/chargePaypal",function(req,res){
           }
         }
     });
-  },200)
+  },3000)
 });
 
 //Function to send email to the buyer when a purchase is successfully made

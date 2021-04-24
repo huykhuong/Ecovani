@@ -360,6 +360,7 @@ router.post("/product/add-product", isStaff , function(req, res) {
   if (req.files) {
     var imageFile = typeof(req.files.image) !== "undefined" ? req.files.image.name : ""
   }
+  console.log(req.files.image)
   req.checkBody('title', 'Title must have a value').notEmpty();
   req.checkBody('description', "Description must have a value").notEmpty();
   req.checkBody('price', 'Price must have a value').isDecimal();
